@@ -1,0 +1,11 @@
+section,metric,value,source
+training_vs_inference,distilgpt2_training_memory_ratio,around 4.7x to 4.8x inference memory,training sequence experiment
+sequence_length_training,peak_allocated_32_to_128_tokens,1592.43 MB to 1616.71 MB,distilgpt2 sequence-length training
+batch_size_training,peak_allocated_batch_1_to_4,1600.19 MB to 1648.43 MB,distilgpt2 batch-size training
+optimizer_comparison,adamw_vs_sgd_peak_allocated_difference,644.45 MB,SGD vs AdamW training comparison
+optimizer_state_estimator,adamw_optimizer_state_relative_error,3.03%,optimizer-state estimator evaluation
+training_estimator,training_estimator_v2_allocated_MRE,2.98%,training estimator V2 evaluation
+training_estimator,training_estimator_v2_reserved_MRE,3.50%,training estimator V2 evaluation
+training_pef,fit_fail_accuracy_without_margin,91.07%,training PEF simulation
+training_pef_safety_margin,best_safety_margin,5%,safety-margin PEF simulation
+training_pef_safety_margin,dangerous_failures_after_5_percent_margin,0,safety-margin PEF simulation
