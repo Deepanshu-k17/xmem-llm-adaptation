@@ -1,0 +1,6 @@
+finding_id,finding,evidence,importance
+1,TrainingMemoryEstimator V4 is the strongest current training estimator.,"V4 achieved 2.98% allocated MRE, 3.66% allocated mean error, 3.69% reserved MRE, and 4.29% reserved mean error across combined distilgpt2 + gpt2 training validation.",This makes V4 the candidate final estimator for the training-memory phase.
+2,V4 fixed the distilgpt2 SGD failure caused by V3.,"For distilgpt2 SGD at 64 tokens, V3 allocated error was 12.77%, while V4 restored it to 2.97%.",This showed that optimizer-only correction was insufficient.
+3,V4 preserved the gpt2 SGD improvement from V3.,"For gpt2 SGD at 128 tokens, V2 allocated error was 17.69%, while V4 kept it at 6.67%.",This improved training-memory prediction for larger GPT-style models.
+4,Model-size-aware correction improved estimator balance.,V4 uses SGD factor 0.65 below 100M parameters and 0.35 above/equal 100M parameters.,This better handles different model scales.
+5,V4 reduced worst-case training prediction error.,Allocated max error dropped from 17.69% in V2 to 8.77% in V4; reserved max error dropped from 16.83% to 9.52%.,Lower worst-case error is important for deployment-style fit/fail prediction.
