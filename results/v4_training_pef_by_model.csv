@@ -1,0 +1,3 @@
+model_name,total_cases,correct_cases,dangerous_failures,conservative_failures,accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent
+distilgpt2,152,146,4,2,96.05263157894737,2.631578947368421,1.3157894736842104
+gpt2,114,110,4,0,96.49122807017544,3.508771929824561,0.0
