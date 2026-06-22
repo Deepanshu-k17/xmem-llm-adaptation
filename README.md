@@ -14,7 +14,7 @@ The project currently includes:
 * optimizer-state memory estimation
 * training memory estimator V4
 * gpt2 training validation
-* training PEF-style fit/fail simulation
+* V4 training PEF-style fit/fail simulation
 * safety-margin analysis for safer workload placement
 
 ---
@@ -330,20 +330,51 @@ V4 reduced worst-case error while preserving good performance across both `disti
 
 ---
 
-## Training PEF-style Fit/Fail Simulation
+## V4 Training PEF-style Fit/Fail Simulation
 
-A PEF-style simulation was performed using predicted vs actual reserved memory.
+A PEF-style simulation was performed using V4 predicted reserved memory.
 
-Without safety margin:
+The goal was to test whether V4 can correctly decide if a training workload fits under a GPU memory limit.
 
-* total cases: **112**
-* accuracy: **91.07%**
-* dangerous failures: **7**
-* conservative failures: **3**
+Across **266 simulated training placement cases**, V4 achieved:
 
-Most dangerous failures occurred near tight memory boundaries.
+| metric                    |  value |
+| ------------------------- | -----: |
+| total cases               |    266 |
+| correct cases             |    256 |
+| dangerous failures        |      8 |
+| conservative failures     |      2 |
+| accuracy                  | 96.24% |
+| dangerous failure rate    |  3.01% |
+| conservative failure rate |  0.75% |
 
-### Safety Margin
+This improves over the earlier training PEF result of **91.07% accuracy**.
+
+### PEF by Model
+
+| model      | accuracy | dangerous failure rate | conservative failure rate |
+| ---------- | -------: | ---------------------: | ------------------------: |
+| distilgpt2 |   96.05% |                  2.63% |                     1.32% |
+| gpt2       |   96.49% |                  3.51% |                     0.00% |
+
+### PEF by Optimizer
+
+| optimizer | accuracy | dangerous failure rate | conservative failure rate |
+| --------- | -------: | ---------------------: | ------------------------: |
+| AdamW     |   96.32% |                  2.63% |                     1.05% |
+| SGD       |   96.05% |                  3.95% |                     0.00% |
+
+Most failures occurred near tight memory boundaries, especially around **1700 MB** and **2600 MB**.
+
+At relaxed memory limits such as **2048 MB**, **3072 MB**, **4096 MB**, and **8192 MB**, predictions were fully correct.
+
+The remaining issue is that **8 dangerous underpredictions still exist**, so the next step is V4 safety-margin simulation.
+
+---
+
+## Earlier Training Safety-margin Analysis
+
+A previous safety-margin simulation was performed before V4 using predicted reserved memory.
 
 A safety margin was added to predicted reserved memory:
 
@@ -358,11 +389,9 @@ safe_predicted_reserved_MB = predicted_peak_reserved_MB × (1 + safety_margin)
 |           10% |   86.61% |                  0 |                    15 |
 |           15% |   85.71% |                  0 |                    16 |
 
-A **5% safety margin** gave the best tradeoff.
+A **5% safety margin** gave the best tradeoff in the earlier training dataset.
 
-It removed all dangerous failures while slightly improving overall accuracy.
-
-The next step is to repeat this PEF-style simulation using the final V4 training estimator.
+The next step is to repeat this safety-margin simulation using V4 predictions.
 
 ---
 
@@ -406,6 +435,24 @@ results/
     training_estimator_v4_error_by_sequence_length.csv
     training_estimator_v2_v3_v4_metrics.csv
 
+    v4_training_pef_cases.csv
+    v4_training_pef_summary.csv
+    v4_training_pef_by_memory_limit.csv
+    v4_training_pef_by_model.csv
+    v4_training_pef_by_optimizer.csv
+
+plots/
+    actual_vs_predicted_allocated.png
+    actual_vs_predicted_reserved.png
+    pef_failure_rate_by_limit.png
+    pef_accuracy_by_model.png
+    dangerous_failure_by_model.png
+
+    v4_training_pef_accuracy_by_memory_limit.png
+    v4_training_pef_failure_rate_by_memory_limit.png
+    v4_training_pef_accuracy_by_model.png
+    v4_training_pef_accuracy_by_optimizer.png
+
 report/
     inference_phase_report.md
     pef_style_simulation.md
@@ -415,6 +462,7 @@ report/
     training_estimator_improvement_report.md
     training_estimator_v4_model_size_correction_report.md
     final_training_estimator_report.md
+    v4_training_pef_simulation_report.md
 ```
 
 ---
@@ -429,6 +477,8 @@ AdamW uses significantly more memory than SGD because it stores optimizer-state 
 
 TrainingMemoryEstimator V4 is the strongest current training estimator because it combines optimizer-specific and model-size-aware backward temporary memory correction.
 
+V4 also improves deployment-style fit/fail prediction, achieving **96.24% PEF-style accuracy** across 266 training placement cases.
+
 Reserved memory is important for fit/fail prediction because CUDA allocator behavior can cause a workload to fail even when allocated memory alone looks safe.
 
 ---
@@ -441,6 +491,7 @@ Current limitations:
 * The main validation models are `distilgpt2` and `gpt2`.
 * The 100M parameter threshold in V4 is empirical.
 * Larger LLMs still need validation.
+* V4 safety-margin simulation is still pending.
 * Real model parallelism is not implemented yet.
 * Sparsity and quantization modules are planned but not complete yet.
 * CNN and Vision Transformer architecture comparison is planned but not complete yet.
@@ -452,16 +503,15 @@ Current limitations:
 
 Planned next steps:
 
-1. Run V4 training PEF-style fit/fail simulation.
-2. Run V4 safety-margin analysis.
-3. Compare inference PEF vs training PEF.
-4. Add precision and quantization memory estimation.
-5. Add sparsity memory estimation.
-6. Add model-parallel memory partitioning simulation.
-7. Add CNN vs Transformer memory comparison.
-8. Prepare final combined project report after all technical modules are complete.
-9. Update final README after quantization, sparsity, model parallelism, and architecture comparison are done.
-10. Prepare final mentor/interview package.
+1. Run V4 safety-margin analysis.
+2. Compare inference PEF vs training PEF.
+3. Add precision and quantization memory estimation.
+4. Add sparsity memory estimation.
+5. Add model-parallel memory partitioning simulation.
+6. Add CNN vs Transformer memory comparison.
+7. Prepare final combined project report after all technical modules are complete.
+8. Update final README after quantization, sparsity, model parallelism, and architecture comparison are done.
+9. Prepare final mentor/interview package.
 
 ---
 
@@ -477,6 +527,6 @@ The project currently has strong completed work in:
 * training memory prediction
 * gpt2 training validation
 * TrainingMemoryEstimator V4
-* PEF-style simulation and safety-margin analysis
+* V4 training PEF-style fit/fail simulation
 
-The next phase extends the project toward the official scope by adding quantization, sparsity, model-parallel memory estimation, and CNN/Transformer architecture comparison.
+The next phase extends the project toward the official scope by adding V4 safety margins, quantization, sparsity, model-parallel memory estimation, and CNN/Transformer architecture comparison.
