@@ -2,16 +2,18 @@
 
 This project builds an xMem-inspired GPU memory profiling and prediction pipeline for Transformer/LLM inference and training workloads.
 
-The goal is to study how peak GPU memory changes with model size, input length, generated length, batch size, cache setting, dtype, optimizer choice, and allocator behavior, then build estimator modules that predict peak allocated and peak reserved GPU memory.
+The goal is to study how peak GPU memory changes with model size, input length, generated length, batch size, cache setting, dtype, optimizer choice, training stage, and CUDA allocator behavior, then build estimator modules that predict peak allocated and peak reserved GPU memory.
 
 The project currently includes:
 
 * inference memory profiling
 * inference memory estimators
+* gpt2 inference validation
 * PEF-style fit/fail simulation for inference
 * training memory profiling
 * optimizer-state memory estimation
-* training memory estimator
+* training memory estimator V4
+* gpt2 training validation
 * training PEF-style fit/fail simulation
 * safety-margin analysis for safer workload placement
 
@@ -19,7 +21,7 @@ The project currently includes:
 
 ## Current Status
 
-The project has two main phases:
+The project currently has two completed core phases:
 
 1. **Inference memory prediction**
 2. **Training memory prediction**
@@ -28,7 +30,16 @@ The inference phase studies memory behavior during text generation.
 
 The training phase studies memory behavior during forward pass, loss computation, backward pass, optimizer step, and zero_grad.
 
-The current implementation includes both phases for GPT-style models.
+The current implementation focuses on GPT-style models and has been validated on both `distilgpt2` and `gpt2`.
+
+Upcoming extensions include:
+
+* precision and quantization memory estimation
+* sparsity memory estimation
+* model-parallel memory partitioning
+* CNN vs Transformer architecture comparison
+
+These extensions are planned to align the project more closely with xMem-style adaptation for large model workloads.
 
 ---
 
@@ -36,10 +47,13 @@ The current implementation includes both phases for GPT-style models.
 
 * `sshleifer/tiny-gpt2`
 * `distilgpt2`
+* `gpt2`
 
 `sshleifer/tiny-gpt2` was mainly used for pipeline validation.
 
-`distilgpt2` was used for more meaningful memory-scaling experiments.
+`distilgpt2` was used for meaningful memory-scaling experiments.
+
+`gpt2` was used to validate whether the estimators generalize to a larger GPT-style model.
 
 ---
 
@@ -91,6 +105,7 @@ The project currently includes:
 * `CombinedInferenceEstimator`
 * `OptimizerStateEstimator`
 * `TrainingMemoryEstimator`
+* `TrainingMemoryEstimatorV4`
 
 ---
 
@@ -102,11 +117,15 @@ For `distilgpt2`, fp16 reduced peak allocated memory from **343.41 MB** to **181
 
 This is a **47.22% reduction**.
 
+For `gpt2`, fp16 reduced peak allocated memory from **504.11 MB** to **264.78 MB** for the same batch/input/output setting.
+
+This is approximately a **47.48% reduction**.
+
 ### Batch Size
 
 For `distilgpt2`, increasing batch size from 1 to 8 increased total peak allocated memory from **335.36 MB** to **384.00 MB**.
 
-Memory per sample decreased sharply because model weights are shared across the batch.
+Memory per sample decreased because model weights are shared across the batch.
 
 ### Inference Estimator
 
@@ -114,6 +133,15 @@ For `distilgpt2`, the `CombinedInferenceEstimator` achieved:
 
 * **2.36% mean error** for peak allocated memory
 * **2.36% mean error** for peak reserved memory
+
+For `gpt2`, the estimator achieved:
+
+* **2.50% mean error** for peak allocated memory
+* **2.28% mean error** for peak reserved memory
+* **2.66% allocated MRE**
+* **2.06% reserved MRE**
+
+This supports that the inference estimator generalizes beyond `distilgpt2` to a larger GPT-style model.
 
 ### Inference PEF-style Fit/Fail Simulation
 
@@ -137,6 +165,13 @@ For `distilgpt2`:
 For `distilgpt2`, training used around **4.7x to 4.8x** more peak allocated memory than inference under comparable settings.
 
 This shows that training memory needs separate modeling from inference memory.
+
+Training memory includes additional components:
+
+* gradients
+* optimizer states
+* backward temporary tensors
+* optimizer-step memory behavior
 
 ### Sequence Length
 
@@ -173,7 +208,9 @@ For `distilgpt2` training with batch size 1 and input length 64:
 
 AdamW used **644.45 MB** more peak allocated memory than SGD.
 
-The stage-wise logs showed that both optimizers had the same peak after backward, but AdamW jumped sharply after optimizer step. This shows that AdamW optimizer states are a major contributor to training memory.
+The stage-wise logs showed that both optimizers had similar memory after backward, but AdamW jumped sharply after optimizer step. This shows that AdamW optimizer states are a major contributor to training memory.
+
+For `gpt2`, the same behavior was observed. At 64 tokens, AdamW current allocated memory increased from **983.20 MB** after backward to **1934.12 MB** after optimizer step, a jump of about **950.92 MB**.
 
 ---
 
@@ -195,36 +232,101 @@ For `distilgpt2` in fp32:
 * observed AdamW-SGD peak allocated difference: **644.45 MB**
 * relative error: **3.03%**
 
+For `gpt2` in fp32:
+
+* parameter memory: **474.70 MB**
+* estimated AdamW optimizer-state memory: **949.40 MB**
+* observed AdamW optimizer-step jump at 64 tokens: **950.92 MB**
+
 This supports modeling AdamW optimizer state as approximately **2 × parameter memory**.
 
 ---
 
-## TrainingMemoryEstimator
+## TrainingMemoryEstimator Evolution
 
-The training estimator uses:
+### V1
+
+The first training estimator used:
 
 * parameter memory
 * gradient memory
 * optimizer-state memory
 * activation memory
-* backward temporary memory
-* allocator padding
+* framework overhead
 
-The first version underpredicted memory because it did not include backward temporary memory.
+It underpredicted memory because it did not include backward temporary memory.
 
-After adding backward temporary memory correction, the estimator improved significantly.
+### V2
 
-| estimator                  | allocated MRE | reserved MRE |
-| -------------------------- | ------------: | -----------: |
-| TrainingMemoryEstimator V1 |        15.66% |       16.12% |
-| TrainingMemoryEstimator V2 |         2.98% |        3.50% |
+V2 added backward temporary memory correction:
 
-`TrainingMemoryEstimator V2` achieved:
+```text
+backward_temp_memory = parameter_memory × 0.65
+```
+
+For `distilgpt2`, V2 achieved:
 
 * **2.98% allocated MRE**
 * **3.50% reserved MRE**
 * **3.46% allocated mean error**
 * **3.87% reserved mean error**
+
+### V3
+
+V3 made the backward temporary correction optimizer-specific:
+
+| case              | backward_temp_factor |
+| ----------------- | -------------------: |
+| AdamW             |                 0.65 |
+| Adam              |                 0.65 |
+| SGD               |                 0.35 |
+| SGD with momentum |                 0.45 |
+
+V3 improved `gpt2` SGD prediction but damaged `distilgpt2` SGD prediction.
+
+This showed that optimizer-specific correction alone was not enough.
+
+### V4
+
+V4 adds optimizer-specific and model-size-aware correction.
+
+| case                            | backward_temp_factor |
+| ------------------------------- | -------------------: |
+| AdamW                           |                 0.65 |
+| Adam                            |                 0.65 |
+| SGD below 100M parameters       |                 0.65 |
+| SGD above/equal 100M parameters |                 0.35 |
+| SGD with momentum               |                 0.45 |
+| default                         |                 0.50 |
+
+This fixed the `distilgpt2` SGD failure from V3 while preserving the `gpt2` SGD improvement.
+
+---
+
+## TrainingMemoryEstimator V4 Results
+
+On the combined `distilgpt2` + `gpt2` training validation set, V4 achieved:
+
+| metric               | value |
+| -------------------- | ----: |
+| allocated MRE        | 2.98% |
+| allocated mean error | 3.66% |
+| allocated max error  | 8.77% |
+| reserved MRE         | 3.69% |
+| reserved mean error  | 4.29% |
+| reserved max error   | 9.52% |
+
+V4 is the current candidate final training estimator.
+
+### V2 vs V3 vs V4
+
+| estimator | allocated MRE | allocated mean error | allocated max error | reserved MRE | reserved mean error | reserved max error |
+| --------- | ------------: | -------------------: | ------------------: | -----------: | ------------------: | -----------------: |
+| V2        |         2.99% |                4.95% |              17.69% |        3.69% |               5.00% |             16.83% |
+| V3        |         2.99% |                4.36% |              12.77% |        4.20% |               4.99% |             12.52% |
+| V4        |         2.98% |                3.66% |               8.77% |        3.69% |               4.29% |              9.52% |
+
+V4 reduced worst-case error while preserving good performance across both `distilgpt2` and `gpt2`.
 
 ---
 
@@ -260,6 +362,8 @@ A **5% safety margin** gave the best tradeoff.
 
 It removed all dangerous failures while slightly improving overall accuracy.
 
+The next step is to repeat this PEF-style simulation using the final V4 training estimator.
+
 ---
 
 ## Project Structure
@@ -278,6 +382,7 @@ src/
         combined_inference_estimator.py
         optimizer_state_estimator.py
         training_memory_estimator.py
+        training_memory_estimator_v4.py
 
 results/
     inference_clean.csv
@@ -290,28 +395,16 @@ results/
     pef_by_memory_limit.csv
     realistic_gpu_limit_summary.csv
 
-    training_phase_key_metrics.csv
-    training_phase_key_findings.csv
-    training_estimator_v2_predictions.csv
-    training_estimator_v2_metrics.csv
-    training_estimator_v1_vs_v2_metrics.csv
-    training_pef_summary.csv
-    training_pef_safety_margin_summary.csv
-    training_pef_best_safety_margin.csv
+    gpt2_inference_validation.csv
+    gpt2_inference_estimator_predictions.csv
+    gpt2_inference_estimator_metrics.csv
 
-plots/
-    actual_vs_predicted_allocated.png
-    actual_vs_predicted_reserved.png
-    pef_failure_rate_by_limit.png
-    pef_accuracy_by_model.png
-    dangerous_failure_by_model.png
-
-    training_estimator_v1_vs_v2_allocated_mre.png
-    training_estimator_v1_vs_v2_reserved_mre.png
-    training_actual_vs_predicted_allocated.png
-    training_pef_accuracy_vs_safety_margin.png
-    training_pef_dangerous_failure_vs_safety_margin.png
-    training_pef_tradeoff_vs_safety_margin.png
+    training_estimator_v4_predictions.csv
+    training_estimator_v4_metrics.csv
+    training_estimator_v4_error_by_model.csv
+    training_estimator_v4_error_by_optimizer.csv
+    training_estimator_v4_error_by_sequence_length.csv
+    training_estimator_v2_v3_v4_metrics.csv
 
 report/
     inference_phase_report.md
@@ -320,23 +413,23 @@ report/
     optimizer_state_estimator_report.md
     training_memory_estimator_report.md
     training_estimator_improvement_report.md
-    training_pef_simulation_report.md
-    training_pef_safety_margin_report.md
+    training_estimator_v4_model_size_correction_report.md
+    final_training_estimator_report.md
 ```
 
 ---
 
 ## Main Interpretation
 
-The inference estimator works well for `distilgpt2`, which is the more meaningful model in the current experiments.
+The inference estimator generalizes well from `distilgpt2` to `gpt2`.
 
-`sshleifer/tiny-gpt2` is useful for validating the pipeline, but it is too small for realistic memory-estimation evaluation because framework and allocator overhead dominate its memory usage.
+Training memory requires a separate estimator because training introduces gradients, optimizer states, backward temporary tensors, and optimizer-step memory behavior.
 
-For training, optimizer choice is critical. AdamW uses significantly more memory than SGD because of optimizer-state tensors.
+AdamW uses significantly more memory than SGD because it stores optimizer-state tensors. The observed AdamW memory jump closely matches the expected 2 × parameter-memory rule.
 
-The training estimator becomes much more accurate after adding backward temporary memory correction.
+TrainingMemoryEstimator V4 is the strongest current training estimator because it combines optimizer-specific and model-size-aware backward temporary memory correction.
 
-The 5% safety margin makes fit/fail prediction safer by removing dangerous underprediction in the current training dataset.
+Reserved memory is important for fit/fail prediction because CUDA allocator behavior can cause a workload to fail even when allocated memory alone looks safe.
 
 ---
 
@@ -345,12 +438,13 @@ The 5% safety margin makes fit/fail prediction safer by removing dangerous under
 Current limitations:
 
 * Experiments are limited to single-GPU Colab/T4-style runs.
-* The main meaningful model is `distilgpt2`.
-* Larger GPT-style models still need validation.
-* The backward temporary memory correction is empirical.
-* The safety margin is evaluated on a small dataset.
-* Real model parallelism is not implemented.
-* Sparsity and quantization training experiments are not yet included.
+* The main validation models are `distilgpt2` and `gpt2`.
+* The 100M parameter threshold in V4 is empirical.
+* Larger LLMs still need validation.
+* Real model parallelism is not implemented yet.
+* Sparsity and quantization modules are planned but not complete yet.
+* CNN and Vision Transformer architecture comparison is planned but not complete yet.
+* Reserved memory can vary across CUDA/PyTorch runtime environments.
 
 ---
 
@@ -358,9 +452,31 @@ Current limitations:
 
 Planned next steps:
 
-* validate inference estimator on `gpt2`
-* validate training estimator on `gpt2`
-* test whether optimizer-state and backward-temp formulas generalize
-* add more model-generalization analysis
-* improve README and runnable examples
-* prepare a final combined report after additional validation
+1. Run V4 training PEF-style fit/fail simulation.
+2. Run V4 safety-margin analysis.
+3. Compare inference PEF vs training PEF.
+4. Add precision and quantization memory estimation.
+5. Add sparsity memory estimation.
+6. Add model-parallel memory partitioning simulation.
+7. Add CNN vs Transformer memory comparison.
+8. Prepare final combined project report after all technical modules are complete.
+9. Update final README after quantization, sparsity, model parallelism, and architecture comparison are done.
+10. Prepare final mentor/interview package.
+
+---
+
+## Final Current Status
+
+The project currently has strong completed work in:
+
+* LLM inference memory profiling
+* LLM inference memory prediction
+* gpt2 inference validation
+* LLM training memory profiling
+* optimizer-state estimation
+* training memory prediction
+* gpt2 training validation
+* TrainingMemoryEstimator V4
+* PEF-style simulation and safety-margin analysis
+
+The next phase extends the project toward the official scope by adding quantization, sparsity, model-parallel memory estimation, and CNN/Transformer architecture comparison.
