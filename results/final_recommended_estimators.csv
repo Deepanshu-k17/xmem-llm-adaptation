@@ -1,0 +1,4 @@
+use_case,recommended_estimator,reason,important_metric,caution
+LLM inference memory prediction,CombinedInferenceEstimator,Strong low-error prediction on distilgpt2 and gpt2 inference validation.,"gpt2 allocated mean error = 2.50%, reserved mean error = 2.28%",Tiny-gpt2 is too small for realistic evaluation because overhead dominates.
+LLM training raw memory prediction,TrainingMemoryEstimator V4,Best combined training estimator across distilgpt2 and gpt2.,"allocated mean error = 3.66%, reserved mean error = 4.29%",100M parameter threshold is empirical and needs more model validation.
+safe training workload placement,TrainingMemoryEstimator V4 + 7.5% safety margin,Removes all dangerous underpredictions in current validation.,"0 dangerous failures, 95.11% PEF accuracy","Increases conservative failures, so GPU utilization may decrease."
