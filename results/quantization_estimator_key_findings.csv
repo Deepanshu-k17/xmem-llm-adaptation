@@ -1,0 +1,5 @@
+finding_id,finding,evidence,why_it_matters
+1,QuantizationMemoryEstimator reproduces the Day 43 metadata-overhead simulation.,"At group size 128, int8 effective memory reduction is about 74.22% and int4 is about 86.72%.",The quantization logic is now reusable instead of notebook-only.
+2,"The estimator separates raw parameter memory, metadata memory, and effective parameter memory.","Each output row includes raw_parameter_memory_MB, metadata_memory_MB, and effective_parameter_memory_MB.",This avoids overclaiming quantization savings.
+3,Metadata overhead remains proportionally larger for int4 than int8.,"At group size 128, metadata overhead averages 3.125% for int8 and 6.250% for int4.",Lower-bit quantization is more sensitive to metadata assumptions.
+4,"QuantizationMemoryEstimator is analytical, not runtime profiling.","The estimator uses parameter counts, bytes per parameter, group size, and metadata assumptions.",The module should not be misrepresented as real int8/int4 CUDA measurement.

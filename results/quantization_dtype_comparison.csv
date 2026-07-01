@@ -1,0 +1,9 @@
+model_name,num_parameters,dtype,bits_per_parameter,bytes_per_parameter,group_size,metadata_case,raw_parameter_memory_MB,metadata_memory_MB,effective_parameter_memory_MB,fp32_parameter_memory_MB,effective_reduction_percent,metadata_overhead_percent_of_raw_quantized,scope_note
+distilgpt2,81912576,fp32,32,4.0,128,scale_plus_zero_point,312.4716796875,0.0,312.4716796875,312.4716796875,0.0,0.0,"Analytical parameter-memory estimate, not real quantized runtime execution."
+distilgpt2,81912576,fp16,16,2.0,128,scale_plus_zero_point,156.23583984375,0.0,156.23583984375,312.4716796875,50.0,0.0,"Analytical parameter-memory estimate, not real quantized runtime execution."
+distilgpt2,81912576,int8,8,1.0,128,scale_plus_zero_point,78.117919921875,2.4411849975585938,80.5591049194336,312.4716796875,74.21875,3.125,"Analytical parameter-memory estimate, not real quantized runtime execution."
+distilgpt2,81912576,int4,4,0.5,128,scale_plus_zero_point,39.0589599609375,2.4411849975585938,41.500144958496094,312.4716796875,86.71875,6.25,"Analytical parameter-memory estimate, not real quantized runtime execution."
+gpt2,124439808,fp32,32,4.0,128,scale_plus_zero_point,474.7001953125,0.0,474.7001953125,474.7001953125,0.0,0.0,"Analytical parameter-memory estimate, not real quantized runtime execution."
+gpt2,124439808,fp16,16,2.0,128,scale_plus_zero_point,237.35009765625,0.0,237.35009765625,474.7001953125,50.0,0.0,"Analytical parameter-memory estimate, not real quantized runtime execution."
+gpt2,124439808,int8,8,1.0,128,scale_plus_zero_point,118.675048828125,3.7085952758789062,122.3836441040039,474.7001953125,74.21875,3.125,"Analytical parameter-memory estimate, not real quantized runtime execution."
+gpt2,124439808,int4,4,0.5,128,scale_plus_zero_point,59.3375244140625,3.7085952758789062,63.046119689941406,474.7001953125,86.71875,6.25,"Analytical parameter-memory estimate, not real quantized runtime execution."

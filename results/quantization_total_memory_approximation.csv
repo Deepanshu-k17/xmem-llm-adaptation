@@ -1,0 +1,9 @@
+model_name,dtype,group_size,effective_parameter_memory_MB,non_parameter_memory_assumed_MB,estimated_total_memory_MB,estimated_total_reduction_percent,measured_total_memory_MB,measured_total_reduction_percent,estimation_type,scope_note
+distilgpt2,fp32,128,312.4716796875,30.938320312500025,343.41,0.0,343.41,0.0,measured_available,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+distilgpt2,fp16,128,156.23583984375,30.938320312500025,187.17416015625003,45.495425247881535,181.25,47.220523572406165,measured_available,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+distilgpt2,int8,128,80.5591049194336,30.938320312500025,111.49742523193362,67.53227185232416,,,analytical_total_approximation,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+distilgpt2,int4,128,41.500144958496094,30.938320312500025,72.43846527099612,78.90612816429454,,,analytical_total_approximation,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+gpt2,fp32,128,474.7001953125,29.409804687500014,504.11,0.0,504.11,0.0,measured_available,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+gpt2,fp16,128,237.35009765625,29.409804687500014,266.75990234375,47.08299729349745,264.78,47.47574934042174,measured_available,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+gpt2,int8,128,122.3836441040039,29.409804687500014,151.79344879150392,69.88882410753527,,,analytical_total_approximation,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.
+gpt2,int4,128,63.046119689941406,29.409804687500014,92.45592437744142,81.65957343090963,,,analytical_total_approximation,Total-memory approximation assumes non-parameter memory remains unchanged from fp32.

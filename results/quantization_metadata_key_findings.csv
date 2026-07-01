@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Metadata overhead slightly reduces theoretical quantization savings.,"With group size 128, int8 effective reduction is about 74.22% and int4 effective reduction is about 86.72%.",Realistic quantization estimation must include scale/zero-point storage.
+2,Metadata overhead affects int4 more than int8 proportionally.,Average metadata overhead is about 3.12% of raw int8 parameter memory and 6.25% of raw int4 parameter memory.,"Lower-bit formats have smaller raw weight memory, so metadata becomes relatively more important."
+3,Larger group sizes reduce metadata overhead.,Group size 256 stores fewer scale/zero-point groups than group size 32.,There is a tradeoff between quantization granularity and metadata memory.
+4,"This simulation is still analytical, not real runtime quantized execution.",The simulation adds metadata assumptions but does not load or run int8/int4 kernels.,It prevents overclaiming measured runtime savings.
+5,"Quantization mainly reduces parameter memory, not necessarily all runtime memory.","Activations, KV cache, temporary buffers, and allocator behavior may remain unchanged.",A full memory estimator must separate parameter memory from total GPU memory.
