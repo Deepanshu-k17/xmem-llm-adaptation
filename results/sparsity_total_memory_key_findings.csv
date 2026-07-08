@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Measured fp32 inference memory is parameter-dominated for the tested GPT-style models.,Average non-parameter memory fraction is about 7.42%.,Sparse parameter compression can significantly affect estimated total memory when sparsity is high enough.
+2,Low sparsity can increase total memory under unstructured sparse storage.,"At 25% sparsity, average estimated total-memory reduction is -46.29%.",Index metadata can outweigh savings when too many weights remain nonzero.
+3,50% sparsity is approximately the total-memory break-even point in this model.,"At 50% sparsity, average estimated total-memory reduction is 0.00%.",This matches the parameter-memory break-even behavior from Day 48/49.
+4,High sparsity gives meaningful total-memory savings.,"At 75% sparsity, average total-memory reduction is 46.29%; at 90%, it is 74.06%.",Sparsity only becomes useful when sparsity is high enough and sparse storage is supported.
+5,"This is still an analytical approximation, not real sparse runtime profiling.",Sparse total memory is estimated using unchanged non-parameter memory and analytical sparse parameter memory.,"Real sparse runtime depends on sparse kernels, hardware support, sparse format, and workload shape."

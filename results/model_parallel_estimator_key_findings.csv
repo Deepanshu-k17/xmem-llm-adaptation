@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,ModelParallelMemoryEstimator reproduces Day 52 analytical partitioning behavior.,"Effective fp32 reductions are 42.00% at 2 devices, 67.00% at 4 devices, and 79.50% at 8 devices.",Model-parallel memory logic is now reusable project code.
+2,The estimator separates ideal partitioned memory from overhead memory.,"Each row includes ideal_partitioned_parameter_memory_MB, replicated_overhead_memory_MB, and communication_buffer_memory_MB.",This avoids pretending model-parallel scaling is perfectly linear.
+3,Combined overhead reduces ideal scaling by 8 percentage points.,The estimator uses 5% replication overhead and 3% communication buffer overhead.,Distributed memory planning must include communication and replicated-memory costs.
+4,"The module supports fp32, fp16, and bf16 parameter-memory estimation.","supported_dtypes() returns fp32, fp16, and bf16.",The estimator can be combined later with precision-aware memory planning.
+5,"This is analytical model-parallel estimation, not real multi-GPU profiling.","No tensor parallelism, pipeline parallelism, NCCL communication, or distributed runtime was executed.","The project should claim model-parallel simulation, not implementation."

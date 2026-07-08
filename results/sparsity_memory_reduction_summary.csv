@@ -1,0 +1,6 @@
+sparsity_percent,avg_sparse_total_parameter_memory_MB,avg_reduction_percent,min_reduction_percent,max_reduction_percent
+0.0,787.171875,-100.0,-100.0,-100.0
+25.0,590.37890625,-50.0,-50.0,-50.0
+50.0,393.5859375,0.0,0.0,0.0
+75.0,196.79296875,50.0,50.0,50.0
+90.0,78.71718749999998,80.0,80.0,80.0

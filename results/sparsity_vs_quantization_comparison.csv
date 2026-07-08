@@ -1,0 +1,6 @@
+method,compression_type,runtime_measured,analytical_or_measured,avg_total_memory_reduction_percent,distilgpt2_reduction_percent,gpt2_reduction_percent,main_tradeoff
+fp16 precision,lower precision dtype,partly measured,measured fp32/fp16 runtime memory + analytical total approximation,46.28921127068949,45.495425247881535,47.08299729349745,"Usually practical and widely supported, but savings are lower than parameter-only 50%."
+int8 quantization,lower precision weight quantization,no,analytical estimate only,68.71054797992971,67.53227185232416,69.88882410753527,"Strong memory reduction, but requires real quantized execution support to validate."
+int4 quantization,lower precision weight quantization,no,analytical estimate only,80.2828507976021,78.90612816429454,81.65957343090963,"Largest estimated memory reduction, but metadata, packing, quality, and kernel support matter."
+75% unstructured sparsity,remove zero weights but store indices,no,analytical estimate only,46.28921127068949,45.495425247881535,47.08299729349745,Only useful after enough sparsity to overcome index metadata overhead.
+90% unstructured sparsity,remove zero weights but store indices,no,analytical estimate only,74.06273803310319,72.79268039661046,75.33279566959592,"Strong estimated reduction, but real sparse speed/memory depends heavily on hardware and kernels."

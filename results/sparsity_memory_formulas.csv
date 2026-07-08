@@ -1,0 +1,3 @@
+storage_type,value_bytes,index_bytes_per_nonzero,uses_index_metadata,note
+dense_fp32,4.0,0.0,False,Dense fp32 baseline. Stores every parameter value.
+unstructured_sparse_fp32,4.0,4.0,True,Stores only nonzero values plus index metadata. Analytical storage estimate only.

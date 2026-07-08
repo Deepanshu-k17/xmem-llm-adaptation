@@ -2,69 +2,52 @@
 
 This project builds an xMem-inspired GPU memory profiling and prediction pipeline for Transformer/LLM inference and training workloads.
 
-The goal is to study how peak GPU memory changes with model size, sequence length, generation length, batch size, dtype, optimizer choice, CUDA allocator behavior, and quantization-related memory assumptions, then build estimator modules that predict peak allocated and peak reserved GPU memory.
+The goal is to study how peak GPU memory changes with model size, sequence length, generation length, batch size, dtype, optimizer choice, CUDA allocator behavior, quantization assumptions, sparsity assumptions, and model-parallel partitioning assumptions.
 
-The project currently covers:
+The project builds estimator modules that predict or approximate:
 
-* inference memory profiling
-* inference memory estimation
-* gpt2 inference validation
-* PEF-style fit/fail simulation for inference
-* training memory profiling
-* optimizer-state memory estimation
-* training memory estimator V4
-* gpt2 training validation
-* V4 training PEF-style fit/fail simulation
-* safety-margin analysis for safe workload placement
-* fp32 vs fp16 precision-memory analysis
-* analytical int8/int4 quantization-memory estimation
-* quantization metadata overhead simulation
-* quantization-aware total-memory approximation
+- inference peak allocated memory
+- inference peak reserved memory
+- training peak allocated memory
+- training peak reserved memory
+- optimizer-state memory
+- precision/quantization memory changes
+- sparsity memory changes
+- model-parallel per-device memory
 
 ---
 
 ## Current Status
 
-The project currently has three completed core phases:
+The project currently has completed work in five main phases:
 
-1. **Inference memory prediction**
-2. **Training memory prediction**
+1. **Inference memory profiling and prediction**
+2. **Training memory profiling and prediction**
 3. **Precision and quantization memory adaptation**
+4. **Sparsity memory estimation**
+5. **Model-parallel memory partitioning simulation**
 
-The inference phase studies memory behavior during text generation.
+The project has been tested or analytically simulated on:
 
-The training phase studies memory behavior during forward pass, loss computation, backward pass, optimizer step, and zero_grad.
+- `sshleifer/tiny-gpt2`
+- `distilgpt2`
+- `gpt2`
 
-The precision/quantization phase studies how dtype and analytical quantization assumptions affect parameter memory and estimated total memory.
+Important clarification:
 
-The current implementation focuses on GPT-style models and has been validated on:
-
-* `sshleifer/tiny-gpt2`
-* `distilgpt2`
-* `gpt2`
-
-Upcoming extensions include:
-
-* sparsity memory estimation
-* model-parallel memory partitioning simulation
-* CNN vs Transformer architecture comparison
-* final combined project report
+```text
+Quantization int8/int4, sparsity, and model-parallel results are analytical memory estimates, not measured runtime execution results.
+```
 
 ---
 
 ## Models Used
 
-| Model                 | Purpose                                |
-| --------------------- | -------------------------------------- |
-| `sshleifer/tiny-gpt2` | pipeline validation                    |
-| `distilgpt2`          | main memory-scaling experiments        |
-| `gpt2`                | validation on a larger GPT-style model |
-
-`sshleifer/tiny-gpt2` was mainly used to validate the logger and pipeline.
-
-`distilgpt2` was used for meaningful inference/training memory-scaling experiments.
-
-`gpt2` was used to test whether the estimators generalize beyond `distilgpt2`.
+| Model                 | Purpose                                    |
+| --------------------- | ------------------------------------------ |
+| `sshleifer/tiny-gpt2` | Pipeline validation                        |
+| `distilgpt2`          | Main inference/training memory experiments |
+| `gpt2`                | Larger GPT-style validation model          |
 
 ---
 
@@ -72,33 +55,33 @@ Upcoming extensions include:
 
 The profiling pipeline records:
 
-* model name
-* GPU name
-* batch size
-* input tokens
-* generated tokens
-* dtype
-* cache setting
-* optimizer name
-* peak allocated memory
-* peak reserved memory
-* final allocated memory
-* final reserved memory
-* runtime
-* OOM status
-* error message
+- model name
+- GPU name
+- batch size
+- input tokens
+- generated tokens
+- dtype
+- cache setting
+- optimizer name
+- peak allocated memory
+- peak reserved memory
+- final allocated memory
+- final reserved memory
+- runtime
+- OOM status
+- error message
 
-For training workloads, memory is also logged at key training stages:
+For training workloads, stage-level memory is also logged:
 
-* before model load
-* after model load
-* after batch creation
-* after optimizer creation
-* after forward pass
-* after loss computation
-* after backward pass
-* after optimizer step
-* after zero_grad
+- before model load
+- after model load
+- after batch creation
+- after optimizer creation
+- after forward pass
+- after loss computation
+- after backward pass
+- after optimizer step
+- after zero_grad
 
 Stage-level logging is important because peak training memory can occur temporarily during backward pass or optimizer step.
 
@@ -108,130 +91,95 @@ Stage-level logging is important because peak training memory can occur temporar
 
 The project currently includes:
 
-* `BaseMemoryEstimator`
-* `ImprovedBaseMemoryEstimator`
-* `KVCacheEstimator`
-* `PrecisionAwareEstimator`
-* `AllocatorCorrectionEstimator`
-* `CombinedInferenceEstimator`
-* `OptimizerStateEstimator`
-* `TrainingMemoryEstimator`
-* `TrainingMemoryEstimatorV4`
-* `QuantizationMemoryEstimator`
+```text
+src/estimators/
+    model_config_utils.py
+    base_estimator.py
+    improved_base_estimator.py
+    kv_cache_estimator.py
+    precision_estimator.py
+    allocator_correction.py
+    combined_inference_estimator.py
+    optimizer_state_estimator.py
+    training_memory_estimator.py
+    training_memory_estimator_v4.py
+    quantization_memory_estimator.py
+    sparsity_memory_estimator.py
+    model_parallel_memory_estimator.py
+```
+
+### Main estimator roles
+
+| Estimator                      | Purpose                                                   |
+| ------------------------------ | --------------------------------------------------------- |
+| `CombinedInferenceEstimator`   | Predicts inference peak allocated/reserved memory         |
+| `OptimizerStateEstimator`      | Estimates optimizer-state memory, especially AdamW vs SGD |
+| `TrainingMemoryEstimatorV4`    | Final training-memory estimator                           |
+| `QuantizationMemoryEstimator`  | Analytical quantization parameter-memory estimator        |
+| `SparsityMemoryEstimator`      | Analytical sparse parameter-memory estimator              |
+| `ModelParallelMemoryEstimator` | Analytical per-device model-parallel memory estimator     |
 
 ---
+
+# Phase 1: Inference Memory Prediction
 
 ## Key Inference Results
 
-### Precision
-
-For `distilgpt2`, fp16 reduced peak allocated memory from **343.41 MB** to **181.25 MB** compared with fp32.
-
-This is a **47.22% reduction**.
-
-For `gpt2`, fp16 reduced peak allocated memory from **504.11 MB** to **264.78 MB**.
-
-This is a **47.48% reduction**.
-
-Average measured fp16 allocated-memory reduction across the tested models:
-
-| Metric                             |  Value |
-| ---------------------------------- | -----: |
-| Average allocated-memory reduction | 47.35% |
-| Minimum allocated-memory reduction | 47.22% |
-| Maximum allocated-memory reduction | 47.48% |
-
-The reduction is close to half, but not exactly 50%, because total runtime memory includes more than parameter tensors.
-
----
-
-### Batch Size
-
-For `distilgpt2`, increasing batch size from 1 to 8 increased total peak allocated memory from **335.36 MB** to **384.00 MB**.
-
-Memory per sample decreased because model weights are shared across the batch.
-
----
-
-### Inference Estimator
-
 For `distilgpt2`, the `CombinedInferenceEstimator` achieved:
 
-* **2.36% mean error** for peak allocated memory
-* **2.36% mean error** for peak reserved memory
+| Metric                    | Value |
+| ------------------------- | ----: |
+| peak allocated mean error | 2.36% |
+| peak reserved mean error  | 2.36% |
 
 For `gpt2`, the estimator achieved:
 
-* **2.50% mean error** for peak allocated memory
-* **2.28% mean error** for peak reserved memory
-* **2.66% allocated MRE**
-* **2.06% reserved MRE**
+| Metric                    | Value |
+| ------------------------- | ----: |
+| peak allocated mean error | 2.50% |
+| peak reserved mean error  | 2.28% |
+| allocated MRE             | 2.66% |
+| reserved MRE              | 2.06% |
 
 This supports that the inference estimator generalizes beyond `distilgpt2`.
 
 ---
 
-### Inference PEF-style Fit/Fail Simulation
+## Inference PEF-style Fit/Fail Simulation
 
 Across 720 simulated fit/fail cases:
 
-* overall accuracy: **94.17%**
-* dangerous failure rate: **5.56%**
-* conservative failure rate: **0.28%**
+| Metric                    |  Value |
+| ------------------------- | -----: |
+| overall accuracy          | 94.17% |
+| dangerous failure rate    |  5.56% |
+| conservative failure rate |  0.28% |
 
 For `distilgpt2`:
 
-* accuracy: **99.52%**
-* dangerous failure rate: **0.00%**
+| Metric                 |  Value |
+| ---------------------- | -----: |
+| accuracy               | 99.52% |
+| dangerous failure rate |  0.00% |
 
 ---
 
-## Key Training Results
+# Phase 2: Training Memory Prediction
 
-### Training vs Inference
+## Training vs Inference
 
 For `distilgpt2`, training used around **4.7x to 4.8x** more peak allocated memory than inference under comparable settings.
 
-This shows that training memory requires separate modeling from inference memory.
+Training memory needs separate modeling because it includes:
 
-Training memory includes additional components:
-
-* gradients
-* optimizer states
-* backward temporary tensors
-* optimizer-step memory behavior
+- gradients
+- optimizer states
+- backward temporary tensors
+- optimizer-step memory behavior
 
 ---
 
-### Sequence Length
-
-For `distilgpt2` training with AdamW:
-
-| Input tokens | Peak allocated memory | Peak reserved memory |
-| -----------: | --------------------: | -------------------: |
-|           32 |            1592.43 MB |            1700.0 MB |
-|           64 |            1600.69 MB |            1738.0 MB |
-|          128 |            1616.71 MB |            1726.0 MB |
-
-Training memory increased with sequence length, but fixed components such as parameters, gradients, and optimizer states dominated total memory.
-
----
-
-### Batch Size
-
-For `distilgpt2` training with AdamW and input length 64:
-
-| Batch size | Peak allocated memory | Peak reserved memory |
-| ---------: | --------------------: | -------------------: |
-|          1 |            1600.19 MB |            1738.0 MB |
-|          2 |            1616.21 MB |            1726.0 MB |
-|          4 |            1648.43 MB |            1768.0 MB |
-
-Batch-size scaling was sublinear because parameters, gradients, and optimizer states are shared across the batch.
-
----
-
-### Optimizer Comparison
+## Optimizer Comparison
 
 For `distilgpt2` training with batch size 1 and input length 64:
 
@@ -242,9 +190,9 @@ For `distilgpt2` training with batch size 1 and input length 64:
 
 AdamW used **644.45 MB** more peak allocated memory than SGD.
 
-The stage-wise logs showed that both optimizers had similar memory after backward, but AdamW jumped sharply after optimizer step.
+For `gpt2`, AdamW current allocated memory increased from **983.20 MB** after backward to **1934.12 MB** after optimizer step, a jump of about **950.92 MB**.
 
-For `gpt2`, the same pattern was observed. At 64 tokens, AdamW current allocated memory increased from **983.20 MB** after backward to **1934.12 MB** after optimizer step, a jump of about **950.92 MB**.
+This matches the expected AdamW optimizer-state behavior.
 
 ---
 
@@ -261,89 +209,28 @@ The `OptimizerStateEstimator` models optimizer-state memory using optimizer-spec
 
 For `distilgpt2` in fp32:
 
-* parameter memory: **312.47 MB**
-* estimated AdamW optimizer-state memory: **624.94 MB**
-* observed AdamW-SGD peak allocated difference: **644.45 MB**
-* relative error: **3.03%**
+| Metric                                       |     Value |
+| -------------------------------------------- | --------: |
+| parameter memory                             | 312.47 MB |
+| estimated AdamW optimizer-state memory       | 624.94 MB |
+| observed AdamW-SGD peak allocated difference | 644.45 MB |
+| relative error                               |     3.03% |
 
 For `gpt2` in fp32:
 
-* parameter memory: **474.70 MB**
-* estimated AdamW optimizer-state memory: **949.40 MB**
-* observed AdamW optimizer-step jump at 64 tokens: **950.92 MB**
+| Metric                                 |     Value |
+| -------------------------------------- | --------: |
+| parameter memory                       | 474.70 MB |
+| estimated AdamW optimizer-state memory | 949.40 MB |
+| observed AdamW optimizer-step jump     | 950.92 MB |
 
 This supports modeling AdamW optimizer state as approximately **2 × parameter memory**.
 
 ---
 
-## TrainingMemoryEstimator Evolution
+## TrainingMemoryEstimator V4
 
-### V1
-
-The first training estimator used:
-
-* parameter memory
-* gradient memory
-* optimizer-state memory
-* activation memory
-* framework overhead
-
-It underpredicted memory because it did not include backward temporary memory.
-
----
-
-### V2
-
-V2 added backward temporary memory correction:
-
-```text
-backward_temp_memory = parameter_memory × 0.65
-```
-
-For `distilgpt2`, V2 achieved:
-
-* **2.98% allocated MRE**
-* **3.50% reserved MRE**
-* **3.46% allocated mean error**
-* **3.87% reserved mean error**
-
----
-
-### V3
-
-V3 made the backward temporary correction optimizer-specific:
-
-| Case              | Backward temporary factor |
-| ----------------- | ------------------------: |
-| AdamW             |                      0.65 |
-| Adam              |                      0.65 |
-| SGD               |                      0.35 |
-| SGD with momentum |                      0.45 |
-
-V3 improved `gpt2` SGD prediction but damaged `distilgpt2` SGD prediction.
-
-This showed that optimizer-specific correction alone was not enough.
-
----
-
-### V4
-
-V4 adds optimizer-specific and model-size-aware correction:
-
-| Case                            | Backward temporary factor |
-| ------------------------------- | ------------------------: |
-| AdamW                           |                      0.65 |
-| Adam                            |                      0.65 |
-| SGD below 100M parameters       |                      0.65 |
-| SGD above/equal 100M parameters |                      0.35 |
-| SGD with momentum               |                      0.45 |
-| default                         |                      0.50 |
-
-This fixed the `distilgpt2` SGD failure from V3 while preserving the `gpt2` SGD improvement.
-
----
-
-## TrainingMemoryEstimator V4 Results
+TrainingMemoryEstimator V4 uses optimizer-specific and model-size-aware backward temporary memory correction.
 
 On the combined `distilgpt2` + `gpt2` training validation set, V4 achieved:
 
@@ -356,11 +243,11 @@ On the combined `distilgpt2` + `gpt2` training validation set, V4 achieved:
 | reserved mean error  | 4.29% |
 | reserved max error   | 9.52% |
 
-V4 is the current candidate final training estimator.
+V4 is the current final training estimator.
 
 ---
 
-### V2 vs V3 vs V4
+## V2 vs V3 vs V4
 
 | Estimator | Allocated MRE | Allocated mean error | Allocated max error | Reserved MRE | Reserved mean error | Reserved max error |
 | --------- | ------------: | -------------------: | ------------------: | -----------: | ------------------: | -----------------: |
@@ -374,10 +261,6 @@ V4 reduced worst-case error while preserving good performance across both `disti
 
 ## V4 Training PEF-style Fit/Fail Simulation
 
-A PEF-style simulation was performed using V4 predicted reserved memory.
-
-The goal was to test whether V4 can correctly decide if a training workload fits under a GPU memory limit.
-
 Across **266 simulated training placement cases**, V4 achieved:
 
 | Metric                    |  Value |
@@ -390,92 +273,31 @@ Across **266 simulated training placement cases**, V4 achieved:
 | dangerous failure rate    |  3.01% |
 | conservative failure rate |  0.75% |
 
-This improves over the earlier training PEF result of **91.07% accuracy**.
+With a **7.5% safety margin**:
 
----
+| Metric                |  Value |
+| --------------------- | -----: |
+| accuracy              | 95.11% |
+| dangerous failures    |      0 |
+| conservative failures |     13 |
 
-### PEF by Model
-
-| Model      | Accuracy | Dangerous failure rate | Conservative failure rate |
-| ---------- | -------: | ---------------------: | ------------------------: |
-| distilgpt2 |   96.05% |                  2.63% |                     1.32% |
-| gpt2       |   96.49% |                  3.51% |                     0.00% |
-
----
-
-### PEF by Optimizer
-
-| Optimizer | Accuracy | Dangerous failure rate | Conservative failure rate |
-| --------- | -------: | ---------------------: | ------------------------: |
-| AdamW     |   96.32% |                  2.63% |                     1.05% |
-| SGD       |   96.05% |                  3.95% |                     0.00% |
-
-Most failures occurred near tight memory boundaries, especially around **1700 MB** and **2600 MB**.
-
-At relaxed memory limits such as **2048 MB**, **3072 MB**, **4096 MB**, and **8192 MB**, predictions were fully correct.
-
----
-
-## V4 Safety-margin Analysis
-
-V4 without safety margin achieved high accuracy but still had dangerous underpredictions.
-
-Safety margins were tested:
-
-| Safety margin | Accuracy | Dangerous failures | Conservative failures |
-| ------------: | -------: | -----------------: | --------------------: |
-|            0% |   96.24% |                  8 |                     2 |
-|            2% |   97.37% |                  4 |                     3 |
-|            5% |   96.62% |                  1 |                     8 |
-|          7.5% |   95.11% |                  0 |                    13 |
-|           10% |   93.98% |                  0 |                    16 |
-|           15% |   89.85% |                  0 |                    27 |
-
-The highest raw accuracy was at **2%**, but it still had dangerous failures.
-
-The safest recommended setting is:
+Recommended safe placement estimator:
 
 ```text
 TrainingMemoryEstimator V4 + 7.5% safety margin
 ```
 
-At 7.5% margin:
-
-* accuracy: **95.11%**
-* dangerous failures: **0**
-* conservative failures: **13**
-
-This shows the tradeoff between safety and utilization.
-
 ---
 
-## Final Estimator Recommendations
+# Phase 3: Precision and Quantization Memory Adaptation
 
-| Use case                           | Recommended estimator                             | Reason                                                          |
-| ---------------------------------- | ------------------------------------------------- | --------------------------------------------------------------- |
-| LLM inference memory prediction    | `CombinedInferenceEstimator`                      | Strong low-error prediction on `distilgpt2` and `gpt2`          |
-| LLM training raw memory prediction | `TrainingMemoryEstimator V4`                      | Best combined training estimator across `distilgpt2` and `gpt2` |
-| Safe training workload placement   | `TrainingMemoryEstimator V4 + 7.5% safety margin` | Removes all dangerous underpredictions in current validation    |
-
----
-
-## Precision and Quantization Adaptation
-
-The precision and quantization phase extends the project toward optimization-aware memory estimation.
-
-This phase includes:
-
-* measured fp32 vs fp16 precision comparison
-* analytical fp32/fp16/int8/int4 parameter-memory estimation
-* metadata overhead simulation
-* reusable `QuantizationMemoryEstimator`
-* measured vs analytical comparison
-* quantization-aware total-memory approximation
+This phase studies how dtype and analytical quantization assumptions affect parameter memory and estimated total memory.
 
 Important clarification:
 
 ```text
-int8 and int4 results are analytical memory estimates, not real measured quantized model execution results.
+fp32/fp16 results include measured runtime memory.
+int8/int4 results are analytical estimates only.
 ```
 
 ---
@@ -491,21 +313,15 @@ Average measured fp16 allocated-memory reduction:
 
 | Metric            |  Value |
 | ----------------- | -----: |
-| Average reduction | 47.35% |
-| Minimum reduction | 47.22% |
-| Maximum reduction | 47.48% |
+| average reduction | 47.35% |
+| minimum reduction | 47.22% |
+| maximum reduction | 47.48% |
 
 The theoretical fp16 parameter-memory reduction is 50%, but measured runtime memory reduction is lower because runtime memory also includes activations, KV cache, temporary buffers, framework overhead, and allocator behavior.
 
 ---
 
 ## Analytical Quantization Parameter-memory Estimates
-
-The quantization estimator uses:
-
-```text
-parameter_memory_MB = num_parameters × bytes_per_parameter / 1024²
-```
 
 | Dtype | Bits per parameter | Bytes per parameter | Theoretical parameter-memory reduction vs fp32 |
 | ----- | -----------------: | ------------------: | ---------------------------------------------: |
@@ -536,15 +352,7 @@ For `gpt2`:
 
 ## Quantization Metadata Overhead
 
-Raw quantized parameter memory is not the full story.
-
-Grouped quantization may require metadata such as:
-
-* scale values
-* zero-points
-* group-level metadata
-
-The simulation assumes:
+The simulation assumes grouped quantization metadata:
 
 ```text
 scale + zero-point metadata = 4 bytes per group
@@ -562,70 +370,11 @@ At group size 128:
 
 Metadata overhead affects int4 more strongly than int8 because raw int4 memory is smaller.
 
-At group size 128:
-
-| Dtype | Metadata overhead as % of raw quantized memory |
-| ----- | ---------------------------------------------: |
-| int8  |                                         3.125% |
-| int4  |                                          6.25% |
-
----
-
-## QuantizationMemoryEstimator
-
-The project now includes a reusable analytical module:
-
-```text
-src/estimators/quantization_memory_estimator.py
-```
-
-It estimates:
-
-* raw parameter memory
-* metadata memory
-* effective parameter memory
-* reduction vs fp32
-* metadata overhead percentage
-
-Supported dtypes:
-
-* fp32
-* fp16
-* int8
-* int4
-
-Supported metadata cases:
-
-* none
-* scale_only_fp16
-* scale_plus_zero_point
-
-This module is analytical and should not be described as real int8/int4 runtime profiling.
-
----
-
-## Measured vs Analytical Precision Comparison
-
-The project compares measured fp32/fp16 runtime memory against analytical fp32/fp16 parameter memory.
-
-| Model      | Measured fp16 reduction | Theoretical fp16 parameter reduction |                    Gap |
-| ---------- | ----------------------: | -----------------------------------: | ---------------------: |
-| distilgpt2 |                  47.22% |                               50.00% | 2.78 percentage points |
-| gpt2       |                  47.48% |                               50.00% | 2.52 percentage points |
-
-Average gap:
-
-```text
-2.65 percentage points
-```
-
-This shows that parameter-memory reduction does not directly equal total runtime-memory reduction.
-
 ---
 
 ## Quantization-aware Total-memory Approximation
 
-The project estimates total memory under quantized dtypes using:
+The approximation uses:
 
 ```text
 estimated_total_memory(dtype)
@@ -635,7 +384,7 @@ measured_fp32_total_memory
 + effective_parameter_memory(dtype)
 ```
 
-Equivalently:
+Equivalent:
 
 ```text
 estimated_total_memory(dtype)
@@ -644,20 +393,12 @@ non_parameter_memory
 + effective_parameter_memory(dtype)
 ```
 
-The approximation assumes non-parameter memory remains unchanged from fp32.
-
----
-
 ### fp32 Runtime Memory Decomposition
 
 | Model      | fp32 measured total | fp32 parameter memory | non-parameter memory | parameter fraction | non-parameter fraction |
 | ---------- | ------------------: | --------------------: | -------------------: | -----------------: | ---------------------: |
 | distilgpt2 |           343.41 MB |             312.47 MB |             30.94 MB |             90.99% |                  9.01% |
 | gpt2       |           504.11 MB |             474.70 MB |             29.41 MB |             94.17% |                  5.83% |
-
-The tested GPT-style inference workloads are parameter-dominated.
-
----
 
 ### Estimated Total-memory Reduction
 
@@ -679,13 +420,277 @@ For `gpt2`:
 | int8  |              151.79 MB |                    69.89% |                      N/A |
 | int4  |               92.46 MB |                    81.66% |                      N/A |
 
-The fp16 approximation is close to measured fp16 behavior, especially for `gpt2`, supporting the decomposition method as a reasonable analytical approximation.
+---
 
-However, int8 and int4 remain analytical estimates only.
+# Phase 4: Sparsity Memory Estimation
+
+This phase estimates how unstructured sparsity may affect parameter memory and total memory.
+
+Important clarification:
+
+```text
+Sparsity results are analytical storage estimates only.
+No real sparse CUDA kernels or sparse model execution were measured.
+```
 
 ---
 
-## Project Structure
+## SparsityMemoryEstimator
+
+The project includes:
+
+```text
+src/estimators/sparsity_memory_estimator.py
+```
+
+The estimator computes:
+
+- dense fp32 parameter memory
+- nonzero parameter count
+- sparse value memory
+- sparse index metadata memory
+- sparse total parameter memory
+- memory reduction compared with dense fp32
+
+The current simple unstructured sparse fp32 model assumes:
+
+```text
+value bytes = 4
+index bytes per nonzero = 4
+```
+
+So each nonzero sparse value effectively costs:
+
+```text
+value + index = 8 bytes
+```
+
+Dense fp32 costs:
+
+```text
+4 bytes per parameter
+```
+
+This creates an important break-even behavior.
+
+---
+
+## Sparse Parameter-memory Results
+
+| Sparsity | Interpretation                           | Parameter-memory reduction |
+| -------: | ---------------------------------------- | -------------------------: |
+|       0% | Sparse storage is worse than dense       |                      -100% |
+|      25% | Sparse storage is still worse than dense |                       -50% |
+|      50% | Break-even point                         |                         0% |
+|      75% | Useful sparse memory reduction           |                        50% |
+|      90% | Strong sparse memory reduction           |                        80% |
+
+Main insight:
+
+```text
+Unstructured sparsity is not automatically memory-efficient because index metadata can cancel out the savings from zero weights.
+```
+
+---
+
+## Sparsity-aware Total-memory Approximation
+
+The approximation uses:
+
+```text
+estimated_total_memory(sparsity)
+=
+measured_fp32_total_memory
+- dense_fp32_parameter_memory
++ sparse_total_parameter_memory(sparsity)
+```
+
+Equivalent:
+
+```text
+estimated_total_memory(sparsity)
+=
+non_parameter_memory
++
+sparse_total_parameter_memory(sparsity)
+```
+
+### distilgpt2
+
+| Sparsity | Estimated total memory | Reduction vs fp32 |
+| -------: | ---------------------: | ----------------: |
+|       0% |              655.88 MB |           -90.99% |
+|      25% |              499.65 MB |           -45.50% |
+|      50% |              343.41 MB |             0.00% |
+|      75% |              187.17 MB |            45.50% |
+|      90% |               93.43 MB |            72.79% |
+
+### gpt2
+
+| Sparsity | Estimated total memory | Reduction vs fp32 |
+| -------: | ---------------------: | ----------------: |
+|       0% |              978.81 MB |           -94.17% |
+|      25% |              741.46 MB |           -47.08% |
+|      50% |              504.11 MB |             0.00% |
+|      75% |              266.76 MB |            47.08% |
+|      90% |              124.35 MB |            75.33% |
+
+---
+
+## Sparsity vs Quantization
+
+| Method                    | Main memory effect                           | Runtime measured?       | Main tradeoff                                                          |
+| ------------------------- | -------------------------------------------- | ----------------------- | ---------------------------------------------------------------------- |
+| fp16                      | Reduces bytes per parameter                  | Yes, fp32/fp16 measured | Practical and widely supported                                         |
+| int8                      | Reduces bytes per parameter                  | No                      | Strong analytical saving, needs real quantized execution validation    |
+| int4                      | Reduces bytes per parameter                  | No                      | Larger estimated saving, but quality/kernel support matters            |
+| 75% unstructured sparsity | Removes zero weights but stores indices      | No                      | Similar total-memory saving to fp16 in this approximation              |
+| 90% unstructured sparsity | Removes more zero weights but stores indices | No                      | Strong saving, but real sparse runtime depends on hardware and kernels |
+
+Main sparsity conclusion:
+
+```text
+Sparsity is more complicated than quantization because unstructured sparsity requires index metadata.
+```
+
+---
+
+# Phase 5: Model-parallel Memory Partitioning Simulation
+
+This phase analytically estimates how splitting model parameters across multiple devices affects per-device memory.
+
+Important clarification:
+
+```text
+Model-parallel results are analytical memory-planning estimates only.
+No real tensor parallelism, pipeline parallelism, NCCL, or multi-GPU execution was implemented.
+```
+
+---
+
+## ModelParallelMemoryEstimator
+
+The project includes:
+
+```text
+src/estimators/model_parallel_memory_estimator.py
+```
+
+The estimator computes:
+
+- total parameter memory
+- ideal partitioned parameter memory
+- replicated overhead memory
+- communication buffer memory
+- total overhead memory
+- estimated per-device memory
+- ideal memory reduction
+- effective memory reduction
+
+Supported dtypes:
+
+```text
+fp32
+fp16
+bf16
+```
+
+---
+
+## Model-parallel Assumptions
+
+The current analytical simulation assumes:
+
+```text
+replication overhead = 5%
+communication buffer overhead = 3%
+combined overhead = 8%
+```
+
+Ideal partitioned memory:
+
+```text
+ideal_partitioned_memory = total_parameter_memory / num_devices
+```
+
+Estimated per-device memory:
+
+```text
+estimated_per_device_memory
+=
+ideal_partitioned_memory
++
+replicated_overhead_memory
++
+communication_buffer_memory
+```
+
+---
+
+## Model-parallel Results
+
+With 8% combined overhead:
+
+| Number of devices | Ideal reduction | Effective reduction |
+| ----------------: | --------------: | ------------------: |
+|                 1 |           0.00% |              -8.00% |
+|                 2 |          50.00% |              42.00% |
+|                 4 |          75.00% |              67.00% |
+|                 8 |          87.50% |              79.50% |
+
+Main insight:
+
+```text
+Model parallelism reduces per-device parameter memory, but overhead prevents perfect linear scaling.
+```
+
+---
+
+## Example Per-device Memory
+
+### distilgpt2 fp32
+
+| Devices | Estimated per-device memory |
+| ------: | --------------------------: |
+|       1 |                   337.47 MB |
+|       2 |                   181.23 MB |
+|       4 |                   103.12 MB |
+|       8 |                    64.06 MB |
+
+### gpt2 fp32
+
+| Devices | Estimated per-device memory |
+| ------: | --------------------------: |
+|       1 |                   512.68 MB |
+|       2 |                   275.33 MB |
+|       4 |                   156.65 MB |
+|       8 |                    97.31 MB |
+
+### gpt2 fp16
+
+| Devices | Estimated per-device memory |
+| ------: | --------------------------: |
+|       1 |                   256.34 MB |
+|       2 |                   137.66 MB |
+|       4 |                    78.33 MB |
+|       8 |                    48.66 MB |
+
+---
+
+# Final Estimator Recommendations
+
+| Use case                                    | Recommended estimator                             | Reason                                                   |
+| ------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
+| LLM inference memory prediction             | `CombinedInferenceEstimator`                      | Low prediction error on `distilgpt2` and `gpt2`          |
+| LLM training raw memory prediction          | `TrainingMemoryEstimator V4`                      | Best combined training estimator                         |
+| Safe training placement                     | `TrainingMemoryEstimator V4 + 7.5% safety margin` | Removes dangerous underpredictions in current validation |
+| Quantization parameter-memory estimation    | `QuantizationMemoryEstimator`                     | Includes dtype size and metadata overhead                |
+| Sparsity parameter-memory estimation        | `SparsityMemoryEstimator`                         | Separates value memory and index metadata                |
+| Model-parallel per-device memory estimation | `ModelParallelMemoryEstimator`                    | Separates ideal partitioning and overhead                |
+
+---
+
+# Project Structure
 
 ```text
 src/
@@ -703,6 +708,8 @@ src/
         training_memory_estimator.py
         training_memory_estimator_v4.py
         quantization_memory_estimator.py
+        sparsity_memory_estimator.py
+        model_parallel_memory_estimator.py
 
 results/
     inference_clean.csv
@@ -749,6 +756,29 @@ results/
     quantization_total_memory_approximation.csv
     quantization_memory_decomposition.csv
     quantization_total_memory_key_findings.csv
+    precision_quantization_phase_summary.csv
+
+    sparsity_memory_formulas.csv
+    sparsity_parameter_memory_simulation.csv
+    sparsity_memory_reduction_summary.csv
+    sparsity_key_findings.csv
+    sparsity_estimator_demo.csv
+    sparsity_estimator_summary.csv
+    sparsity_estimator_key_findings.csv
+    sparsity_total_memory_approximation.csv
+    sparsity_memory_decomposition.csv
+    sparsity_total_memory_key_findings.csv
+    sparsity_phase_summary.csv
+    sparsity_vs_quantization_comparison.csv
+    sparsity_final_findings.csv
+    sparsity_recommendations.csv
+
+    model_parallel_memory_formulas.csv
+    model_parallel_parameter_partitioning.csv
+    model_parallel_key_findings.csv
+    model_parallel_estimator_demo.csv
+    model_parallel_estimator_summary.csv
+    model_parallel_estimator_key_findings.csv
 
 plots/
     actual_vs_predicted_allocated.png
@@ -757,27 +787,27 @@ plots/
     pef_accuracy_by_model.png
     dangerous_failure_by_model.png
 
-    v4_training_pef_accuracy_by_memory_limit.png
-    v4_training_pef_failure_rate_by_memory_limit.png
-    v4_training_pef_accuracy_by_model.png
-    v4_training_pef_accuracy_by_optimizer.png
-
     precision_peak_allocated_comparison.png
     precision_peak_reserved_comparison.png
     precision_memory_reduction_percent.png
 
     quantization_parameter_memory_by_dtype.png
     quantization_memory_reduction_percent.png
-    quantization_distilgpt2_gpt2_comparison.png
     quantization_effective_parameter_memory.png
-    quantization_metadata_overhead_by_group_size.png
-    quantization_effective_reduction_percent.png
-    quantization_dtype_effective_memory.png
-    quantization_measured_vs_parameter_memory.png
-    quantization_dtype_reduction_summary.png
     quantization_total_memory_by_dtype.png
-    quantization_parameter_vs_non_parameter.png
     quantization_total_memory_reduction.png
+
+    sparsity_parameter_memory_by_level.png
+    sparsity_memory_reduction_percent.png
+    sparsity_total_memory_by_level.png
+    sparsity_parameter_vs_non_parameter.png
+    sparsity_total_memory_reduction.png
+
+    model_parallel_parameter_memory_by_devices_fp32.png
+    model_parallel_parameter_memory_by_devices_fp16.png
+    model_parallel_memory_reduction_percent_fp32.png
+    model_parallel_memory_reduction_percent_fp16.png
+    model_parallel_replication_overhead.png
 
 report/
     inference_phase_report.md
@@ -791,87 +821,120 @@ report/
     v4_training_pef_simulation_report.md
     v4_training_pef_safety_margin_report.md
     final_estimator_comparison_report.md
+
     precision_memory_adaptation_report.md
     quantization_memory_theory_report.md
     quantization_metadata_overhead_report.md
     quantization_memory_estimator_report.md
     quantization_dtype_comparison_report.md
     quantization_total_memory_approximation_report.md
+    precision_quantization_phase_summary_report.md
+
+    sparsity_memory_theory_report.md
+    sparsity_memory_estimator_report.md
+    sparsity_total_memory_approximation_report.md
+    sparsity_phase_summary_report.md
+
+    model_parallel_memory_theory_report.md
+    model_parallel_memory_estimator_report.md
 ```
 
 ---
 
-## Main Interpretation
+# Main Interpretation
 
-The inference estimator generalizes well from `distilgpt2` to `gpt2`.
+This project shows that LLM memory behavior cannot be explained by parameter count alone.
 
-Training memory requires a separate estimator because training introduces gradients, optimizer states, backward temporary tensors, and optimizer-step memory behavior.
+Inference memory is affected by:
 
-AdamW uses significantly more memory than SGD because it stores optimizer-state tensors. The observed AdamW memory jump closely matches the expected 2 × parameter-memory rule.
+- model parameters
+- batch size
+- sequence length
+- generation length
+- KV cache
+- dtype
+- framework overhead
+- CUDA allocator behavior
 
-TrainingMemoryEstimator V4 is the strongest current training estimator because it combines optimizer-specific and model-size-aware backward temporary memory correction.
+Training memory is affected by additional components:
 
-V4 also improves deployment-style fit/fail prediction, achieving **96.24% PEF-style accuracy** across 266 training placement cases.
+- gradients
+- optimizer states
+- backward temporary tensors
+- optimizer-step behavior
 
-For safe placement, V4 should use a **7.5% safety margin**, which removes dangerous underpredictions in the current validation set.
+The training estimator required separate modeling from the inference estimator.
 
-The precision/quantization phase shows that dtype and quantization are important memory-optimization levers, but parameter-memory savings do not directly equal total runtime-memory savings.
+AdamW memory behavior was explained using optimizer-state estimation, where AdamW stores approximately **2 × parameter memory** as optimizer state.
+
+TrainingMemoryEstimator V4 is the strongest current training estimator because it combines optimizer-specific and model-size-aware correction.
+
+The optimization-aware phase shows:
+
+- fp16 gives strong measured memory reduction
+- int8/int4 quantization can give larger analytical memory reductions
+- sparsity is useful only when sparsity is high enough to overcome metadata overhead
+- model parallelism reduces per-device memory but overhead prevents perfect scaling
 
 ---
 
-## Limitations
+# Limitations
 
 Current limitations:
 
-* Experiments are limited to single-GPU Colab/T4-style runs.
-* The main validation models are `distilgpt2` and `gpt2`.
-* The 100M parameter threshold in V4 is empirical.
-* Larger LLMs still need validation.
-* Real model parallelism is not implemented yet.
-* Sparsity modules are planned but not complete yet.
-* CNN and Vision Transformer architecture comparison is planned but not complete yet.
-* Reserved memory can vary across CUDA/PyTorch runtime environments.
-* int8/int4 quantization results are analytical estimates only.
-* No real int8/int4 quantized model execution has been profiled yet.
-* Quantization latency and quality impact are not measured.
-* Activation quantization and KV-cache quantization are not modeled yet.
-* Quantization kernel packing/alignment overhead is not measured.
+- Experiments are limited to single-GPU Colab/T4-style environments.
+- The main validation models are `distilgpt2` and `gpt2`.
+- Larger LLMs still need validation.
+- Reserved memory can vary across CUDA/PyTorch runtime environments.
+- int8/int4 quantization results are analytical estimates only.
+- No real int8/int4 quantized model execution has been profiled yet.
+- Sparsity results are analytical storage estimates only.
+- No sparse CUDA kernels or sparse runtime execution were profiled.
+- Model-parallel results are analytical memory-planning estimates only.
+- No real tensor parallelism, pipeline parallelism, NCCL, or multi-GPU execution was implemented.
+- Activation partitioning is not modeled.
+- Optimizer-state partitioning under model parallelism is not modeled.
+- Latency, throughput, and quality impact are not evaluated.
 
 ---
 
-## Next Work
+# Next Work
 
 Planned next steps:
 
-1. Summarize the precision and quantization adaptation phase.
-2. Add sparsity memory estimation.
-3. Add model-parallel memory partitioning simulation.
-4. Add CNN vs Transformer memory comparison.
-5. Prepare final combined project report.
-6. Update final README after sparsity, model parallelism, and architecture comparison are complete.
-7. Prepare final mentor/interview package.
+1. Build model-parallel total-memory approximation.
+2. Compare model parallelism with quantization and sparsity.
+3. Add architecture comparison between CNN-style and Transformer-style workloads.
+4. Prepare final combined project report.
+5. Update final project README after all phases are complete.
+6. Prepare final mentor/interview explanation document.
 
 ---
 
-## Final Current Status
+# Final Current Status
 
 The project currently has strong completed work in:
 
-* LLM inference memory profiling
-* LLM inference memory prediction
-* gpt2 inference validation
-* LLM training memory profiling
-* optimizer-state estimation
-* training memory prediction
-* gpt2 training validation
-* TrainingMemoryEstimator V4
-* V4 training PEF-style fit/fail simulation
-* V4 safety-margin analysis
-* final estimator comparison
-* fp32/fp16 precision-memory analysis
-* analytical quantization-memory estimation
-* quantization metadata overhead simulation
-* reusable `QuantizationMemoryEstimator`
-* quantization-aware total-memory approximation
+- LLM inference memory profiling
+- LLM inference memory prediction
+- gpt2 inference validation
+- LLM training memory profiling
+- optimizer-state estimation
+- training memory prediction
+- gpt2 training validation
+- TrainingMemoryEstimator V4
+- V4 training PEF-style fit/fail simulation
+- V4 safety-margin analysis
+- fp32/fp16 precision-memory analysis
+- analytical quantization-memory estimation
+- quantization metadata overhead simulation
+- reusable `QuantizationMemoryEstimator`
+- quantization-aware total-memory approximation
+- analytical sparsity memory estimation
+- reusable `SparsityMemoryEstimator`
+- sparsity-aware total-memory approximation
+- sparsity vs quantization comparison
+- analytical model-parallel memory partitioning
+- reusable `ModelParallelMemoryEstimator`
 
-The next phase extends the project further toward the official scope by adding sparsity, model-parallel memory estimation, and architecture comparison.
+The next phase is model-parallel total-memory approximation and comparison with other memory-optimization strategies.

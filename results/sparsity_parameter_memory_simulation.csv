@@ -1,0 +1,11 @@
+model_name,num_parameters,sparsity_percent,nonzero_fraction,nonzero_parameters,dense_fp32_parameter_memory_MB,sparse_value_memory_MB,sparse_index_memory_MB,sparse_total_parameter_memory_MB,sparse_reduction_MB,sparse_reduction_percent,scope_note
+distilgpt2,81912576,0.0,1.0,81912576,312.4716796875,312.4716796875,312.4716796875,624.943359375,-312.4716796875,-100.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+distilgpt2,81912576,25.0,0.75,61434432,312.4716796875,234.353759765625,234.353759765625,468.70751953125,-156.23583984375,-50.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+distilgpt2,81912576,50.0,0.5,40956288,312.4716796875,156.23583984375,156.23583984375,312.4716796875,0.0,0.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+distilgpt2,81912576,75.0,0.25,20478144,312.4716796875,78.117919921875,78.117919921875,156.23583984375,156.23583984375,50.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+distilgpt2,81912576,90.0,0.09999999999999998,8191257,312.4716796875,31.24716796874999,31.24716796874999,62.49433593749998,249.97734375000002,80.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+gpt2,124439808,0.0,1.0,124439808,474.7001953125,474.7001953125,474.7001953125,949.400390625,-474.7001953125,-100.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+gpt2,124439808,25.0,0.75,93329856,474.7001953125,356.025146484375,356.025146484375,712.05029296875,-237.35009765625,-50.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+gpt2,124439808,50.0,0.5,62219904,474.7001953125,237.35009765625,237.35009765625,474.7001953125,0.0,0.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+gpt2,124439808,75.0,0.25,31109952,474.7001953125,118.675048828125,118.675048828125,237.35009765625,237.35009765625,50.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
+gpt2,124439808,90.0,0.09999999999999998,12443980,474.7001953125,47.47001953124999,47.47001953124999,94.94003906249998,379.76015625,80.0,"Analytical sparse parameter-memory estimate, not real sparse runtime execution."
