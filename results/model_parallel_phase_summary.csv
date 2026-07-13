@@ -1,0 +1,4 @@
+day,phase_step,main_output,main_result,scope
+Day 52,Model-parallel memory theory,Analytical per-device parameter partitioning simulation.,"With 8% combined overhead, effective parameter-memory reduction was 42% for 2 devices, 67% for 4 devices, and 79.5% for 8 devices.",Analytical parameter-memory partitioning only.
+Day 53,ModelParallelMemoryEstimator module,Reusable estimator under src/estimators/model_parallel_memory_estimator.py.,"Estimator computes ideal partitioned memory, overhead memory, estimated per-device memory, and effective reduction.",Reusable analytical estimator code.
+Day 54,Model-parallel total-memory approximation,Combined measured fp32 runtime memory with analytical model-parallel per-device parameter memory.,"Average total-memory reduction: 38.88% for fp32 2-device, 62.03% for fp32 4-device, 73.60% for fp32 8-device, and 77.30% for fp16 4-device model parallelism.","Analytical total-memory approximation, not real multi-GPU profiling."

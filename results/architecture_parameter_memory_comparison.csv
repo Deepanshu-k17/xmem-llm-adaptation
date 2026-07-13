@@ -1,0 +1,3 @@
+architecture,model_name,num_parameters,fp32_parameter_memory_MB,fp16_parameter_memory_MB,main_interpretation
+CNN,SimpleCNN,94538,0.36063385009765625,0.18031692504882812,Small CNN has relatively low parameter memory; activation memory can become important for high image resolution.
+Transformer,SimpleTransformerClassifier,11040778,42.117225646972656,21.058612823486328,"Transformer has higher parameter memory due to embeddings, attention layers, and feed-forward blocks."

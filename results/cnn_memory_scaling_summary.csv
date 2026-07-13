@@ -1,0 +1,9 @@
+scaling_dimension,fixed_value,min_batch_size,max_batch_size,activation_memory_at_min_batch_MB,activation_memory_at_max_batch_MB,scaling_interpretation,min_image_size,max_image_size,activation_memory_at_min_resolution_MB,activation_memory_at_max_resolution_MB
+batch_size,image_size=64,1.0,8.0,1.10986328125,8.87890625,CNN activation memory scales approximately linearly with batch size.,,,,
+batch_size,image_size=128,1.0,8.0,4.43798828125,35.50390625,CNN activation memory scales approximately linearly with batch size.,,,,
+batch_size,image_size=224,1.0,8.0,13.59033203125,108.72265625,CNN activation memory scales approximately linearly with batch size.,,,,
+batch_size,image_size=384,1.0,8.0,39.93798828125,319.50390625,CNN activation memory scales approximately linearly with batch size.,,,,
+image_resolution,batch_size=1,,,,,CNN activation memory grows strongly with image resolution because spatial feature maps scale with H x W.,64.0,384.0,1.10986328125,39.93798828125
+image_resolution,batch_size=2,,,,,CNN activation memory grows strongly with image resolution because spatial feature maps scale with H x W.,64.0,384.0,2.2197265625,79.8759765625
+image_resolution,batch_size=4,,,,,CNN activation memory grows strongly with image resolution because spatial feature maps scale with H x W.,64.0,384.0,4.439453125,159.751953125
+image_resolution,batch_size=8,,,,,CNN activation memory grows strongly with image resolution because spatial feature maps scale with H x W.,64.0,384.0,8.87890625,319.50390625

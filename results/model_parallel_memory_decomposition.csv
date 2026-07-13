@@ -1,0 +1,3 @@
+model_name,num_parameters,measured_fp32_peak_allocated_MB,dense_fp32_parameter_memory_MB,non_parameter_memory_MB,parameter_fraction_percent,non_parameter_fraction_percent,assumption
+distilgpt2,81912576,343.41,312.4716796875,30.938320312500025,90.99085049576307,9.009149504236923,Non-parameter memory is assumed replicated and unchanged across devices.
+gpt2,124439808,504.11,474.7001953125,29.409804687500014,94.1659945869949,5.834005413005101,Non-parameter memory is assumed replicated and unchanged across devices.

@@ -1,0 +1,17 @@
+architecture,model_name,batch_size,image_size,input_shape,num_parameters,fp32_parameter_memory_MB,analytical_activation_memory_MB,peak_allocated_MB,peak_reserved_MB,final_allocated_MB,final_reserved_MB,profiling_status,scope_note
+CNN,SimpleCNN,1,64,1 x 3 x 64 x 64,94538,0.36063385009765625,1.10986328125,9.53466796875,22.0,9.5341796875,22.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,2,64,2 x 3 x 64 x 64,94538,0.36063385009765625,2.2197265625,11.58056640625,24.0,9.5810546875,24.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,4,64,4 x 3 x 64 x 64,94538,0.36063385009765625,4.439453125,13.67431640625,26.0,9.6748046875,26.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,8,64,8 x 3 x 64 x 64,94538,0.36063385009765625,8.87890625,17.86181640625,26.0,9.8623046875,26.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,1,128,1 x 3 x 128 x 128,94538,0.36063385009765625,4.43798828125,13.67431640625,26.0,9.6748046875,26.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,2,128,2 x 3 x 128 x 128,94538,0.36063385009765625,8.8759765625,17.86181640625,26.0,9.8623046875,26.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,4,128,4 x 3 x 128 x 128,94538,0.36063385009765625,17.751953125,26.23681640625,46.0,10.2373046875,46.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,8,128,8 x 3 x 128 x 128,94538,0.36063385009765625,35.50390625,42.98681640625,56.0,10.9873046875,56.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,1,224,1 x 3 x 224 x 224,94538,0.36063385009765625,13.59033203125,22.31103515625,44.0,10.0615234375,44.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,2,224,2 x 3 x 224 x 224,94538,0.36063385009765625,27.1806640625,35.13525390625,52.0,10.6357421875,52.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,4,224,4 x 3 x 224 x 224,94538,0.36063385009765625,54.361328125,60.78369140625,76.0,11.7841796875,76.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,8,224,8 x 3 x 224 x 224,94538,0.36063385009765625,108.72265625,114.08056640625,124.0,14.0810546875,124.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,1,384,1 x 3 x 384 x 384,94538,0.36063385009765625,39.93798828125,47.17431640625,60.0,11.1748046875,60.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,2,384,2 x 3 x 384 x 384,94538,0.36063385009765625,79.8759765625,84.86181640625,96.0,12.8623046875,96.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,4,384,4 x 3 x 384 x 384,94538,0.36063385009765625,159.751953125,160.23681640625,168.0,16.2373046875,168.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.
+CNN,SimpleCNN,8,384,8 x 3 x 384 x 384,94538,0.36063385009765625,319.50390625,311.48681640625,326.0,23.4873046875,326.0,measured_cuda,Measured CUDA forward-pass memory for SimpleCNN.

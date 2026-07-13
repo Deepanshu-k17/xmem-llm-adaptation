@@ -1,0 +1,7 @@
+use_case,recommended_method,reason,caution
+Most defensible measured optimization result,fp16 precision,fp32/fp16 runtime memory was actually measured for distilgpt2 and gpt2.,"The total-memory approximation is still model-based, but fp16 runtime measurements exist."
+Largest analytical memory reduction,int4 quantization,It gives the highest average analytical total-memory reduction at about 80.28%.,"No real int4 execution, latency, or quality impact was measured."
+Best multi-device memory planning strategy,fp16 + 4-device model parallelism,"It combines dtype reduction and parameter partitioning, giving about 77.30% estimated average total-memory reduction.",No real multi-GPU execution was performed.
+Best sparsity-based analytical result,90% unstructured sparsity,It gives about 74.06% estimated average total-memory reduction.,"Real sparse runtime depends heavily on sparse kernels, format, and hardware."
+Safest way to present project,Separate measured results from analytical estimates,"fp16 was measured, while int8/int4, sparsity, and model parallelism were analytical.",Do not overclaim runtime behavior for analytical modules.
+Next project direction,Architecture comparison,Optimization techniques are now complete enough. Next step is comparing CNN-style and Transformer-style memory behavior.,Do not keep extending optimization theory without new measurements.

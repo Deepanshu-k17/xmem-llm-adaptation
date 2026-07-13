@@ -1,0 +1,3 @@
+architecture,model_name,input_type,example_input_shape,main_layers,main_memory_drivers,attention_based
+CNN,SimpleCNN,image,batch x 3 x 224 x 224,"Conv2d, ReLU, MaxPool2d, AdaptiveAvgPool2d, Linear","image resolution, channels, feature maps, batch size",False
+Transformer,SimpleTransformerClassifier,token sequence,batch x sequence_length,"Embedding, positional embedding, TransformerEncoderLayer, Linear","sequence length, embedding size, attention heads, feed-forward size, batch size",True

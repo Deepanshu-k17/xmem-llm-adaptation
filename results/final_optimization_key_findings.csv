@@ -1,0 +1,7 @@
+finding_id,finding,evidence,interpretation
+1,Optimization techniques reduce memory through different mechanisms.,"Quantization reduces bytes per value, sparsity removes zero weights but adds metadata, and model parallelism partitions parameters across devices.",They are not interchangeable; each solves a different memory constraint.
+2,The highest analytical reduction came from int4 quantization.,int4 quantization ranked first with 80.28% average estimated total-memory reduction.,"Low-bit quantization is highly memory-efficient analytically, but needs runtime validation."
+3,fp16 remains the most defensible measured optimization result.,fp16 precision gave 46.29% average estimated total-memory reduction and was based on measured fp32/fp16 runs.,This should be presented as the strongest measured optimization evidence.
+4,Model parallelism becomes competitive when more devices or fp16 are used.,"fp32 4-device model parallelism gave 62.03% average reduction, while fp16 4-device model parallelism gave 77.30%.",Model parallelism is useful for per-device memory reduction but adds distributed-system complexity.
+5,High sparsity can compete with model parallelism analytically.,90% unstructured sparsity gave 74.06% average estimated total-memory reduction.,"Sparse storage can be effective, but only after index metadata overhead is overcome."
+6,Measured and analytical results must be clearly separated.,"int8/int4 quantization, sparsity, and model parallelism were not measured as runtime executions.",This keeps the project honest and defensible.

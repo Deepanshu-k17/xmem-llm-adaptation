@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,CNN activation memory scales approximately linearly with batch size.,"At image size 224, increasing batch size from 1 to 8 increased analytical activation memory by 8.00x.",Batch size is a direct memory-scaling factor for CNN workloads.
+2,CNN activation memory grows strongly with image resolution.,"At batch size 1, increasing image size from 64 to 384 increased analytical activation memory by 35.98x.","CNN feature maps depend on spatial dimensions, so higher image resolution increases memory sharply."
+3,CNN parameter memory is small compared with activation memory for larger inputs.,"SimpleCNN fp32 parameter memory is only 0.3606 MB, while activation memory grows with image size and batch size.","For CNN inference, activations can dominate memory even when parameter count is small."
+4,CNN memory estimation needs image-resolution-aware features.,Activation memory changes with H x W feature-map dimensions.,A GPT-style sequence-length estimator is not enough for CNN-style workloads.
+5,Day 57 focuses on CNN-side scaling only.,Transformer scaling will be analyzed separately in the next architecture-comparison step.,Separating CNN and Transformer scaling makes the comparison cleaner.

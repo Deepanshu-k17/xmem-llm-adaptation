@@ -1,0 +1,7 @@
+finding_id,finding,evidence,why_it_matters
+1,Model parallelism reduces per-device total memory by partitioning parameter memory.,"Average fp32 total-memory reduction is 38.88% at 2 devices, 62.03% at 4 devices, and 73.60% at 8 devices.",This helps estimate whether a model can fit on smaller per-device memory budgets.
+2,Total-memory reduction is lower than parameter-only model-parallel reduction.,Non-parameter memory is assumed replicated and unchanged across devices.,"Activation, KV-cache, framework, and allocator memory limit total-memory scaling."
+3,Combining fp16 with model parallelism gives stronger estimated per-device reduction.,Average fp16 + 4-device model-parallel reduction is 77.30%.,Multiple optimization techniques can be combined for larger memory savings.
+4,Quantization can be more memory-efficient than low-device-count model parallelism in analytical estimates.,"Average int8 reduction is 68.71%, while fp32 2-device model parallelism gives 38.88%.",Different optimization strategies solve different constraints.
+5,Model parallelism has a different tradeoff than quantization or sparsity.,Model parallelism reduces per-device memory but requires multiple devices and communication.,"It is useful when a model is too large for one device, but adds distributed-system complexity."
+6,"This comparison is analytical, not runtime benchmarking.","Quantization int8/int4, sparsity, and model parallelism are not measured runtime executions.","The project should present these as planning estimates, not deployment benchmarks."
