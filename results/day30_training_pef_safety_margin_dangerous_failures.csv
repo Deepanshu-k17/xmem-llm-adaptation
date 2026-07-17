@@ -1,0 +1,8 @@
+model_name,batch_size,input_tokens,optimizer_name,experiment_type,safety_margin,safety_margin_percent,memory_limit_MB,actual_peak_reserved_MB,predicted_peak_reserved_MB,safe_predicted_reserved_MB,actual_peak_allocated_MB,predicted_peak_allocated_MB,actual_fits,predicted_fits,correct_prediction,dangerous_failure,conservative_failure,outcome
+distilgpt2,1,64,adamw,distilgpt2_sequence_length_variation,0.0,0.0,1700,1738.0,1677.2249453906247,1677.2249453906247,1600.69,1552.9860605468748,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,adamw,distilgpt2_sequence_length_variation,0.0,0.0,1725,1738.0,1677.2249453906247,1677.2249453906247,1600.69,1552.9860605468748,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,adamw,distilgpt2_batch_size_variation,0.0,0.0,1700,1738.0,1677.2249453906247,1677.2249453906247,1600.19,1552.9860605468748,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,adamw,distilgpt2_batch_size_variation,0.0,0.0,1725,1738.0,1677.2249453906247,1677.2249453906247,1600.19,1552.9860605468748,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,sgd,distilgpt2_optimizer_comparison,0.0,0.0,1024,1030.0,1002.2861172656252,1002.2861172656252,956.49,928.042701171875,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,adamw,distilgpt2_optimizer_comparison,0.0,0.0,1700,1738.0,1677.2249453906247,1677.2249453906247,1600.94,1552.9860605468748,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,adamw,distilgpt2_optimizer_comparison,0.0,0.0,1725,1738.0,1677.2249453906247,1677.2249453906247,1600.94,1552.9860605468748,False,True,False,True,False,dangerous_underprediction

@@ -1,0 +1,8 @@
+finding_id,finding,evidence,interpretation
+1,"fp16 significantly reduces measured inference memory, but not by exactly 50%.",fp16 reduced peak allocated memory by 47.22% for distilgpt2 and 47.48% for gpt2.,"Total runtime memory contains parameters plus activations, KV cache, buffers, framework overhead, and allocator effects."
+2,Parameter-memory reduction is not equal to total runtime-memory reduction.,"Theoretical fp16 parameter reduction is 50%, but measured runtime reduction averaged 47.35%.",Memory estimators must separate parameter and non-parameter components.
+3,Quantization metadata reduces ideal int8/int4 savings.,"At group size 128, int8 effective reduction became 74.22% instead of 75%, and int4 became 86.72% instead of 87.5%.",Scale and zero-point metadata must be included for realistic analytical quantization estimation.
+4,int4 is more sensitive to metadata overhead than int8.,"At group size 128, metadata overhead was 3.125% for int8 and 6.25% for int4.","Lower-bit formats have smaller raw weight memory, so metadata becomes proportionally larger."
+5,The QuantizationMemoryEstimator makes quantization logic reusable.,The project now includes src/estimators/quantization_memory_estimator.py.,"Quantization estimation is now part of the project architecture, not only notebook analysis."
+6,The total-memory approximation is more realistic than parameter-only estimation.,It decomposes measured fp32 runtime memory into parameter and non-parameter memory.,This gives a better estimate of practical memory savings under dtype/quantization changes.
+7,"int8 and int4 results are still analytical, not measured runtime profiling.",No real int8/int4 quantized model was loaded or profiled.,The project should not overclaim quantized runtime results.

@@ -1,0 +1,3 @@
+model_name,num_rows,avg_allocated_MB,avg_reserved_MB,avg_padding_MB,median_padding_MB,avg_padding_ratio,median_padding_ratio,max_padding_ratio
+distilgpt2,28,325.88500000000005,354.64285714285717,28.757857142857137,28.69999999999999,0.08642667365129687,0.08540076335877858,0.12445095168374817
+sshleifer/tiny-gpt2,20,12.503,26.0,13.497,13.5,1.07950159712613,1.08,1.08

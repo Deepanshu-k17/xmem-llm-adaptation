@@ -1,0 +1,10 @@
+stage,1,2,4
+after_backward,956.49,972.51,1002.98
+after_batch_creation,313.24,331.74,331.74
+after_forward,382.29,454.84,571.78
+after_loss,382.29,454.84,571.78
+after_model_load,313.23,331.73,331.73
+after_optimizer_creation,313.24,331.74,331.74
+after_optimizer_step,1600.19,1616.21,1648.43
+after_zero_grad,1600.19,1616.21,1648.43
+before_model_load,0.0,17.88,17.88

@@ -1,0 +1,10 @@
+stage,adamw,sgd
+after_backward,956.49,956.49
+after_batch_creation,331.74,313.24
+after_forward,391.04,382.29
+after_loss,391.04,382.29
+after_model_load,331.73,313.23
+after_optimizer_creation,331.74,313.24
+after_optimizer_step,1600.94,956.49
+after_zero_grad,1600.94,956.49
+before_model_load,17.88,0.0

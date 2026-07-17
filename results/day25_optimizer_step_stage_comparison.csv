@@ -1,0 +1,7 @@
+stage,allocated_MB,reserved_MB,peak_allocated_MB,peak_reserved_MB,model_name,optimizer_name,batch_size,input_tokens,experiment_type
+after_backward,660.49,1030.0,956.49,1030.0,distilgpt2,sgd,1,64,distilgpt2_optimizer_comparison
+after_optimizer_step,660.49,1030.0,956.49,1030.0,distilgpt2,sgd,1,64,distilgpt2_optimizer_comparison
+after_zero_grad,345.63,1030.0,956.49,1030.0,distilgpt2,sgd,1,64,distilgpt2_optimizer_comparison
+after_backward,660.49,1050.0,956.49,1050.0,distilgpt2,adamw,1,64,distilgpt2_optimizer_comparison
+after_optimizer_step,1287.71,1738.0,1600.94,1738.0,distilgpt2,adamw,1,64,distilgpt2_optimizer_comparison
+after_zero_grad,973.48,1738.0,1600.94,1738.0,distilgpt2,adamw,1,64,distilgpt2_optimizer_comparison

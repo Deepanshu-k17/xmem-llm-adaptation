@@ -1,0 +1,14 @@
+timestamp,device_name,gpu_name,model_name,task,batch_size,input_tokens,max_new_tokens,total_tokens,dtype,use_cache,oom,error_message,runtime_sec,peak_allocated_MB,peak_reserved_MB,final_allocated_MB,final_reserved_MB
+2026-06-15T05:25:46.707670,colab,Tesla T4,gpt2,inference,1,64,32,96,fp32,True,False,,1.7537,493.84,540.0,485.21,540.0
+2026-06-15T05:25:59.085125,colab,Tesla T4,gpt2,inference,1,64,128,192,fp32,True,False,,3.2135,499.42,550.0,485.22,550.0
+2026-06-15T05:26:05.763530,colab,Tesla T4,gpt2,inference,1,128,32,160,fp32,True,False,,0.5285,503.97,546.0,485.22,546.0
+2026-06-15T05:26:08.828302,colab,Tesla T4,gpt2,inference,1,128,128,256,fp32,True,False,,2.0182,504.11,558.0,485.22,558.0
+2026-06-15T05:26:12.895291,colab,Tesla T4,gpt2,inference,1,256,32,288,fp32,True,False,,0.3335,519.72,582.0,485.22,582.0
+2026-06-15T05:26:14.914648,colab,Tesla T4,gpt2,inference,1,256,128,384,fp32,True,False,,2.8287,532.72,582.0,485.22,582.0
+2026-06-15T05:26:19.981867,colab,Tesla T4,gpt2,inference,2,64,32,96,fp32,True,False,,0.7964,503.97,550.0,485.22,550.0
+2026-06-15T05:26:24.835332,colab,Tesla T4,gpt2,inference,2,64,128,192,fp32,True,False,,1.866,532.94,582.0,485.22,582.0
+2026-06-15T05:26:28.940340,colab,Tesla T4,gpt2,inference,2,128,32,160,fp32,True,False,,1.3682,519.72,582.0,485.22,582.0
+2026-06-15T05:26:34.123172,colab,Tesla T4,gpt2,inference,2,128,128,256,fp32,True,False,,1.3261,532.95,582.0,485.22,582.0
+2026-06-15T05:26:38.106244,colab,Tesla T4,gpt2,inference,2,256,32,288,fp32,True,False,,0.3489,562.73,592.0,485.23,592.0
+2026-06-15T05:26:40.105576,colab,Tesla T4,gpt2,inference,2,256,128,384,fp32,True,False,,1.2612,562.73,592.0,485.23,592.0
+2026-06-15T05:26:43.036459,colab,Tesla T4,gpt2,inference,1,128,128,256,fp16,True,False,,1.4381,264.78,268.0,255.24,268.0

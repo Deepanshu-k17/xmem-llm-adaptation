@@ -1,0 +1,4 @@
+input_tokens,peak_allocated_MB,peak_reserved_MB,final_allocated_MB,final_reserved_MB,runtime_sec,oom,allocated_per_token_MB,reserved_per_token_MB
+32,1592.43,1700.0,965.34,1700.0,9.323,False,49.7634375,53.125
+64,1600.69,1738.0,972.73,1738.0,1.6,False,25.01078125,27.15625
+128,1616.71,1726.0,987.62,1726.0,1.549,False,12.630546875,13.484375

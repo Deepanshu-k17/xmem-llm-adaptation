@@ -1,0 +1,3 @@
+architecture,parameter_memory_MB,dominant_scaling_factor,activation_dependency,measured_runtime
+CNN,0.360634,Image Resolution,High,Yes
+Transformer,42.117226,Sequence Length,High,Yes

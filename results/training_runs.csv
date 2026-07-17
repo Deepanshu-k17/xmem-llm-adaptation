@@ -1,0 +1,16 @@
+timestamp,device_name,gpu_name,model_name,task,batch_size,input_tokens,dtype,optimizer_name,learning_rate,oom,error_message,loss,runtime_sec,final_allocated_MB,final_reserved_MB,peak_allocated_MB,peak_reserved_MB
+2026-06-04T04:47:21.614353,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,32,fp32,adamw,5e-05,False,,10.828168,6.441,27.75,48.0,36.48,48.0
+2026-06-04T04:57:20.820568,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,16,fp32,adamw,5e-05,False,,10.828448,5.676,25.37,48.0,27.27,48.0
+2026-06-04T04:57:27.794366,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,32,fp32,adamw,5e-05,False,,10.829083,1.06,28.44,68.0,45.29,68.0
+2026-06-04T04:57:29.319076,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,64,fp32,adamw,5e-05,False,,10.830624,1.043,34.57,84.0,69.84,84.0
+2026-06-04T04:57:30.906285,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,128,fp32,adamw,5e-05,False,,10.827228,1.057,46.84,132.0,118.95,132.0
+2026-06-04T04:58:15.812054,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,64,fp32,sgd,5e-05,False,,10.831019,1.166,32.99,82.0,69.84,82.0
+2026-06-04T04:58:17.457428,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,64,fp32,adamw,5e-05,False,,10.830429,1.035,34.57,84.0,69.84,84.0
+2026-06-08T04:57:04.443752,colab,Tesla T4,distilgpt2,training,1,32,fp32,adamw,5e-05,False,,3.815424,9.323,965.34,1700.0,1592.43,1700.0
+2026-06-08T04:57:15.648185,colab,Tesla T4,distilgpt2,training,1,64,fp32,adamw,5e-05,False,,2.154191,1.6,972.73,1738.0,1600.69,1738.0
+2026-06-08T04:57:18.059131,colab,Tesla T4,distilgpt2,training,1,128,fp32,adamw,5e-05,False,,0.969172,1.549,987.62,1726.0,1616.71,1726.0
+2026-06-08T05:09:35.632732,colab,Tesla T4,distilgpt2,training,1,64,fp32,adamw,5e-05,False,,1.809547,9.727,972.1,1738.0,1600.19,1738.0
+2026-06-08T05:09:46.701705,colab,Tesla T4,distilgpt2,training,2,64,fp32,adamw,5e-05,False,,1.87898,1.362,987.25,1726.0,1616.21,1726.0
+2026-06-08T05:09:48.791799,colab,Tesla T4,distilgpt2,training,4,64,fp32,adamw,5e-05,False,,1.887785,1.362,1018.96,1768.0,1648.43,1768.0
+2026-06-08T05:18:53.351795,colab,Tesla T4,distilgpt2,training,1,64,fp32,sgd,5e-05,False,,1.804632,9.183,345.63,1030.0,956.49,1030.0
+2026-06-08T05:19:03.809840,colab,Tesla T4,distilgpt2,training,1,64,fp32,adamw,5e-05,False,,1.836824,1.441,973.48,1738.0,1600.94,1738.0

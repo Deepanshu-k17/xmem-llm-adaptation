@@ -1,0 +1,3 @@
+model_name,phase,allocated_mean_error,reserved_mean_error,note
+distilgpt2,inference,2.36,2.36,from previous distilgpt2 inference evaluation
+gpt2,inference,2.499337142047585,2.2843346019272683,from gpt2 validation

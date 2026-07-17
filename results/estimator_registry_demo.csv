@@ -1,0 +1,5 @@
+estimator,purpose
+precision,Precision-aware estimation
+quantization,Quantization estimation
+sparsity,Sparse storage estimation
+model_parallel,Model-parallel estimation

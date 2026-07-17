@@ -1,0 +1,5 @@
+model_name,input_tokens,training_peak_allocated_MB,training_peak_reserved_MB,inference_peak_allocated_MB,inference_peak_reserved_MB,allocated_training_vs_inference_ratio,reserved_training_vs_inference_ratio
+distilgpt2,32,1592.43,1700.0,332.18,360.0,4.793876813775664,4.722222222222222
+distilgpt2,64,1600.69,1738.0,335.36,364.0,4.773049856870229,4.774725274725275
+distilgpt2,64,1600.69,1738.0,335.36,364.0,4.773049856870229,4.774725274725275
+distilgpt2,128,1616.71,1726.0,343.24,366.0,4.710144505302412,4.715846994535519

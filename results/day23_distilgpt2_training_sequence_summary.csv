@@ -1,0 +1,2 @@
+experiment,num_runs,min_input_tokens,max_input_tokens,min_peak_allocated_MB,max_peak_allocated_MB,min_peak_reserved_MB,max_peak_reserved_MB,oom_count
+distilgpt2_training_sequence_length,3,32,128,1592.43,1616.71,1700.0,1738.0,0

@@ -1,0 +1,2 @@
+model_name,optimizer,estimated_optimizer_state_MB,observed_peak_allocated_difference_MB,observed_peak_reserved_difference_MB,absolute_error_MB,relative_error_percent
+distilgpt2,adamw,624.943359375,644.45,708.0,19.506640625000045,3.0268664170998596

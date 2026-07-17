@@ -1,0 +1,2 @@
+model_name,inference_peak_allocated_MB,training_peak_allocated_MB,inference_peak_reserved_MB,training_peak_reserved_MB,allocated_training_vs_inference_ratio,reserved_training_vs_inference_ratio
+sshleifer/tiny-gpt2,12.5,36.48,26.0,48.0,2.9183999999999997,1.8461538461538463
