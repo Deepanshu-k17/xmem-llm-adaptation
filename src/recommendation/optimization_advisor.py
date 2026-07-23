@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
-from src.estimators.training_memory_estimator_v4 import (
-    TrainingMemoryEstimatorV4,
+from src.estimators.training_memory_estimator import (
+    TrainingMemoryEstimator,
 )
 
 from src.estimators.quantization_memory_estimator import (
@@ -59,7 +59,7 @@ class OptimizationAdvisor:
 
     def __init__(self):
 
-        self.training_estimator = TrainingMemoryEstimatorV4()
+        self.training_estimator = TrainingMemoryEstimator()
 
         self.quantization_estimator = QuantizationMemoryEstimator()
 

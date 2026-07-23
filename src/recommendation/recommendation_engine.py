@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from typing import Optional
 
 from src.estimators.combined_inference_estimator import CombinedInferenceEstimator
-from src.estimators.training_memory_estimator_v4 import (
-    TrainingMemoryEstimatorV4,
+from src.estimators.training_memory_estimator import (
+    TrainingMemoryEstimator,
 )
 
 
@@ -49,7 +49,7 @@ class RecommendationEngine:
         self.training_estimator = (
             training_estimator
             if training_estimator
-            else TrainingMemoryEstimatorV4()
+            else TrainingMemoryEstimator()
         )
 
         self.safety_margin = safety_margin

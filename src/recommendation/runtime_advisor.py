@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from src.estimators.combined_inference_estimator import (
     CombinedInferenceEstimator,
 )
-from src.estimators.training_memory_estimator_v4 import (
-    TrainingMemoryEstimatorV4,
+from src.estimators.training_memory_estimator import (
+    TrainingMemoryEstimator,
 )
 
 
@@ -30,7 +30,7 @@ class RuntimeAdvisor:
 
     Uses:
     - CombinedInferenceEstimator
-    - TrainingMemoryEstimatorV4
+    - TrainingMemoryEstimator
     """
 
     def __init__(
@@ -49,7 +49,7 @@ class RuntimeAdvisor:
         self.training_estimator = (
             training_estimator
             if training_estimator is not None
-            else TrainingMemoryEstimatorV4()
+            else TrainingMemoryEstimator()
         )
 
         self.safety_margin_percent = safety_margin_percent
