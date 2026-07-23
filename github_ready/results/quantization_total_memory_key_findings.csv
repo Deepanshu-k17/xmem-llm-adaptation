@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Measured fp32 inference memory is parameter-dominated for these GPT-style models.,Average non-parameter memory fraction is about 7.42%.,Quantizing parameters can significantly reduce total memory for these small GPT-style models.
+2,The total-memory approximation closely matches measured fp16 behavior.,"Estimated fp16 total-memory reduction averages 46.29%, while measured fp16 reduction averages 47.35%.",This validates the decomposition approach as a reasonable approximation.
+3,Estimated int8 total-memory reduction is lower than parameter-only int8 reduction.,"Estimated int8 total-memory reduction averages 68.71%, while parameter-only effective reduction was about 74.22%.",Non-parameter memory limits total-memory savings.
+4,Estimated int4 total-memory reduction is lower than parameter-only int4 reduction.,"Estimated int4 total-memory reduction averages 80.28%, while parameter-only effective reduction was about 86.72%.","Even aggressive weight compression does not eliminate activation, KV-cache, and runtime overhead."
+5,"This is still an analytical approximation, not real quantized runtime profiling.",int8 and int4 totals are estimated using unchanged non-parameter memory from fp32.,"The result is useful for reasoning, but should not be overclaimed as measured quantized execution."

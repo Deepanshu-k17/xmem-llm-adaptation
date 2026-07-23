@@ -1,0 +1,4 @@
+estimator,role,num_rows,allocated_MRE,allocated_mean_error,allocated_max_error,reserved_MRE,reserved_mean_error,reserved_max_error
+TrainingMemoryEstimatorV2,V2: baseline training estimator with backward temporary memory correction,14,2.9877862204002046,4.952768074531906,17.69364235248657,3.688746928129558,5.003711780853037,16.833725390069333
+TrainingMemoryEstimatorV3,V3: optimizer-specific correction experiment,14,2.9877862204002046,4.363134954040254,12.774707810262004,4.203541218441693,4.994950770187853,12.519874461468444
+TrainingMemoryEstimatorV4,V4: candidate final estimator with optimizer-specific and model-size-aware correction,14,2.9771727367963567,3.663094001433401,8.767998067668923,3.688746928129558,4.292864610557131,9.524969196302315

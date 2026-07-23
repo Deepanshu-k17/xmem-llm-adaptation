@@ -1,0 +1,5 @@
+Estimator,Purpose,Reusable
+precision,Precision-aware memory estimation,Yes
+quantization,Quantization memory estimation,Yes
+sparsity,Sparse memory estimation,Yes
+model_parallel,Model-parallel memory estimation,Yes

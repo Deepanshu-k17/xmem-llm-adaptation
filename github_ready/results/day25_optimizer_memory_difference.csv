@@ -1,0 +1,5 @@
+metric,sgd,adamw,difference_MB,percent_increase
+peak_allocated_MB,956.49,1600.94,644.45,67.37655385837803
+peak_reserved_MB,1030.0,1738.0,708.0,68.73786407766991
+final_allocated_MB,345.63,973.48,627.85,181.65379162688424
+final_reserved_MB,1030.0,1738.0,708.0,68.73786407766991

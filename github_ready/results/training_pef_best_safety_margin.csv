@@ -1,0 +1,2 @@
+safety_margin,safety_margin_percent,total_cases,correct_cases,dangerous_failures,conservative_failures,accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent
+0.05,5.0,112.0,103.0,0.0,9.0,91.96428571428571,0.0,8.035714285714286

@@ -1,0 +1,3 @@
+model_name,batch_size,input_tokens,dtype,optimizer_name,memory_limit_MB,actual_peak_allocated_MB,predicted_peak_allocated_MB,actual_peak_reserved_MB,predicted_peak_reserved_MB,actual_fits,predicted_fits,correct_prediction,dangerous_failure,conservative_failure,outcome
+distilgpt2,4,64,fp32,adamw,1800,1648.43,1792.964310546875,1768.0,1936.401455390625,True,False,False,False,True,conservative_overprediction
+distilgpt2,4,64,fp32,adamw,1900,1648.43,1792.964310546875,1768.0,1936.401455390625,True,False,False,False,True,conservative_overprediction

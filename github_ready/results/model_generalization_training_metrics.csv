@@ -1,0 +1,3 @@
+model_name,phase,allocated_mean_error,reserved_mean_error,allocated_MRE,reserved_MRE,note
+distilgpt2,training,3.462507,3.868211,2.977173,3.496839,from distilgpt2 TrainingMemoryEstimator V2
+gpt2,training,6.93978329622838,6.517713114202087,5.027568449243121,5.2627948805918,from gpt2 training validation

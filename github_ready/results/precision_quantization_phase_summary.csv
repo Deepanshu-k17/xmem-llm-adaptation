@@ -1,0 +1,7 @@
+day,phase_step,main_output,main_result,scope
+Day 41,fp32 vs fp16 precision analysis,Measured fp16 runtime memory reduction for distilgpt2 and gpt2.,Average fp16 peak allocated memory reduction was 47.35%.,Measured fp32/fp16 inference memory.
+Day 42,Quantization memory theory,"Theoretical parameter-memory formulas for fp32, fp16, int8, and int4.","Theoretical parameter reductions: fp16 50%, int8 75%, int4 87.5%.",Analytical parameter-memory estimation only.
+Day 43,Metadata overhead simulation,Grouped quantization metadata overhead using scale + zero-point metadata.,"At group size 128, int8 effective reduction was 74.22%, int4 was 86.72%.",Analytical parameter + metadata memory estimation.
+Day 44,QuantizationMemoryEstimator module,Reusable estimator module under src/estimators/.,"Estimator computes raw parameter memory, metadata memory, effective memory, and reduction vs fp32.",Reusable analytical estimator code.
+Day 45,Measured vs analytical comparison,Compared measured fp32/fp16 runtime memory with analytical parameter-memory estimates.,"Measured fp16 reduction averaged 47.35%, about 2.65 points below theoretical 50%.",Measured fp32/fp16 + analytical parameter-memory comparison.
+Day 46,Quantization-aware total-memory approximation,"Estimated total memory under fp16, int8, and int4 using parameter/non-parameter decomposition.","Estimated int8 total reduction: 67.53% distilgpt2, 69.89% gpt2; int4: 78.91% distilgpt2, 81.66% gpt2.","Analytical total-memory approximation, not real int8/int4 execution."

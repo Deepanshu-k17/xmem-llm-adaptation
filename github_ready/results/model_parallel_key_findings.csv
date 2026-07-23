@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Model parallelism reduces per-device parameter memory by partitioning model weights across devices.,Ideal partitioned memory scales as total_parameter_memory / num_devices.,This allows larger models to fit when one device cannot hold the full model.
+2,Effective memory reduction is lower than ideal scaling because of overhead.,The simulation includes 8.0% combined replication and communication overhead.,Real model parallelism is not perfectly linear.
+3,Two-device partitioning gives useful but limited memory reduction.,Average fp32 effective per-device reduction at 2 devices is 42.00%.,"Two devices help, but overhead still consumes a visible part of memory."
+4,Four and eight devices provide stronger per-device memory reduction.,Average fp32 effective reduction is 67.00% at 4 devices and 79.50% at 8 devices.,"More devices reduce per-device weight storage, but communication and replication costs remain."
+5,"This is analytical model-parallel planning, not real distributed profiling.","No tensor parallelism, pipeline parallelism, NCCL communication, or multi-GPU runtime was executed.","The results should be presented as memory-estimation logic, not measured distributed performance."

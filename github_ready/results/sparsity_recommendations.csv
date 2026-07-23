@@ -1,0 +1,6 @@
+use_case,recommendation,reason,caution
+Safe project claim,Describe sparsity results as analytical memory estimates only.,No real sparse runtime execution was measured.,Do not claim sparse speedup or measured sparse CUDA memory.
+Memory optimization comparison,Present fp16 as the strongest measured precision result.,fp16 has actual measured runtime memory data from earlier experiments.,Only validated on distilgpt2 and gpt2 inference.
+Sparsity interpretation,Emphasize metadata overhead and break-even sparsity.,The main systems insight is that sparsity can be worse than dense at low sparsity.,Avoid saying sparsity always reduces memory.
+Future work,Mention real sparse kernel profiling as future work.,"Runtime behavior depends on sparse formats, hardware, and kernels.",Analytical estimates cannot prove real deployment behavior.
+Next project phase,Move to model-parallel memory partitioning simulation.,"Precision, quantization, and sparsity adaptation phases are now complete enough.",Do not overextend sparsity without real sparse execution experiments.

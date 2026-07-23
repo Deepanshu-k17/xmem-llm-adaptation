@@ -1,0 +1,7 @@
+metric,value_percent,meaning
+allocated_MRE,2.9771727367963567,Median relative error for peak allocated memory
+allocated_mean_error,3.663094001433401,Mean relative error for peak allocated memory
+allocated_max_error,8.767998067668923,Worst-case relative error for peak allocated memory
+reserved_MRE,3.688746928129558,Median relative error for peak reserved memory
+reserved_mean_error,4.292864610557131,Mean relative error for peak reserved memory
+reserved_max_error,9.524969196302315,Worst-case relative error for peak reserved memory

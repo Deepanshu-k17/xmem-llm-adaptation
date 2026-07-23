@@ -1,0 +1,2 @@
+experiment,num_runs,optimizers_tested,min_peak_allocated_MB,max_peak_allocated_MB,min_peak_reserved_MB,max_peak_reserved_MB,oom_count
+distilgpt2_optimizer_comparison,2,"sgd, adamw",956.49,1600.94,1030.0,1738.0,0

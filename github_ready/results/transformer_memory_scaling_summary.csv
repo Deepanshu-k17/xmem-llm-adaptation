@@ -1,0 +1,10 @@
+scaling_dimension,batch_size,min_sequence_length,max_sequence_length,activation_memory_at_min_sequence_MB,activation_memory_at_max_sequence_MB,scaling_interpretation,sequence_length,min_batch_size,max_batch_size,activation_memory_at_min_batch_MB,activation_memory_at_max_batch_MB
+sequence_length,1.0,32.0,512.0,0.37890625,7.0,Transformer activation memory grows rapidly with sequence length because attention scales quadratically.,,,,,
+sequence_length,2.0,32.0,512.0,0.7578125,14.0,Transformer activation memory grows rapidly with sequence length because attention scales quadratically.,,,,,
+sequence_length,4.0,32.0,512.0,1.515625,28.0,Transformer activation memory grows rapidly with sequence length because attention scales quadratically.,,,,,
+sequence_length,8.0,32.0,512.0,3.03125,56.0,Transformer activation memory grows rapidly with sequence length because attention scales quadratically.,,,,,
+batch_size,,,,,,Transformer activation memory grows approximately linearly with batch size.,32.0,1.0,8.0,0.37890625,3.03125
+batch_size,,,,,,Transformer activation memory grows approximately linearly with batch size.,64.0,1.0,8.0,0.765625,6.125
+batch_size,,,,,,Transformer activation memory grows approximately linearly with batch size.,128.0,1.0,8.0,1.5625,12.5
+batch_size,,,,,,Transformer activation memory grows approximately linearly with batch size.,256.0,1.0,8.0,3.25,26.0
+batch_size,,,,,,Transformer activation memory grows approximately linearly with batch size.,512.0,1.0,8.0,7.0,56.0

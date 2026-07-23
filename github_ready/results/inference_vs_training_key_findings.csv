@@ -1,0 +1,6 @@
+finding_id,finding,evidence,interpretation
+1,Training V4 PEF accuracy is higher than overall inference PEF accuracy.,"Training V4 achieved 96.24% accuracy, while overall inference PEF accuracy was 94.17%.",V4 improved training fit/fail prediction despite training being more complex.
+2,Training V4 still needs safety margin for deployment safety.,"Without margin, V4 had 8 dangerous failures. At 7.5% margin, dangerous failures dropped to 0.",Raw accuracy alone is not enough for safe GPU placement.
+3,The 7.5% training margin trades accuracy for safety.,"Accuracy dropped from 96.24% to 95.11%, but dangerous failures dropped from 8 to 0.",This is acceptable when avoiding OOM matters more than maximizing utilization.
+4,PEF is stricter than MRE.,Small reserved-memory errors near memory limits caused dangerous fit/fail mistakes.,A numerically accurate estimator can still be unsafe near scheduling boundaries.
+5,Reserved memory is the correct basis for placement simulation.,PEF simulation used actual and predicted peak reserved memory rather than allocated memory.,CUDA allocator reservation determines whether a workload may hit memory-limit boundaries.

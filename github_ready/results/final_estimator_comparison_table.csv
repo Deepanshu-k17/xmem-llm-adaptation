@@ -1,0 +1,8 @@
+phase,estimator,validation_scope,allocated_MRE_percent,allocated_mean_error_percent,allocated_max_error_percent,reserved_MRE_percent,reserved_mean_error_percent,reserved_max_error_percent,pef_accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent,safety_margin_percent,status
+inference,CombinedInferenceEstimator,distilgpt2,,2.36,,,2.36,,99.52,0.0,,0.0,strong inference result on distilgpt2
+inference,CombinedInferenceEstimator,gpt2,2.66,2.5,5.09,2.06,2.28,5.22,,,,0.0,validated inference generalization to larger GPT-style model
+training,TrainingMemoryEstimator V1,distilgpt2,15.66,14.45,24.21,16.12,14.13,23.99,,,,0.0,baseline; underpredicted due to missing backward temporary memory
+training,TrainingMemoryEstimator V2,distilgpt2 + gpt2 combined,2.99,4.95,17.69,3.69,5.0,16.83,,,,0.0,good baseline training estimator but weak on gpt2 SGD
+training,TrainingMemoryEstimator V3,distilgpt2 + gpt2 combined,2.99,4.36,12.77,4.2,4.99,12.52,,,,0.0,experimental optimizer-specific correction; damaged distilgpt2 SGD
+training,TrainingMemoryEstimator V4,distilgpt2 + gpt2 combined,2.98,3.66,8.77,3.69,4.29,9.52,96.24,3.01,0.75,0.0,candidate final training estimator for raw prediction
+training,TrainingMemoryEstimator V4 + safety margin,distilgpt2 + gpt2 combined,2.98,3.66,8.77,3.69,4.29,9.52,95.11,0.0,4.89,7.5,recommended safe setting for training placement

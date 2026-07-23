@@ -1,0 +1,5 @@
+finding_id,finding,evidence,why_it_matters
+1,SparsityMemoryEstimator reproduces the Day 48 analytical sparsity results.,"50% sparsity breaks even, 75% sparsity gives 50% reduction, and 90% sparsity gives 80% reduction.",Sparsity logic is now reusable project code instead of notebook-only analysis.
+2,The estimator separates value memory and index metadata memory.,Each output row includes sparse_value_memory_MB and sparse_index_memory_MB.,This prevents overclaiming sparse memory savings.
+3,Unstructured sparsity has a high metadata cost.,"At 0% sparsity, sparse storage uses 2x dense memory because it stores both values and indices.",Sparse storage is not automatically better than dense storage.
+4,"SparsityMemoryEstimator is analytical, not runtime profiling.","The estimator uses parameter count, sparsity level, value bytes, and index bytes.",The module should not be described as measured sparse CUDA behavior.

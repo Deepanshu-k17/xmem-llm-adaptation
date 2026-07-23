@@ -1,0 +1,9 @@
+model_name,batch_size,input_tokens,dtype,optimizer_name,memory_limit_MB,actual_peak_allocated_MB,predicted_peak_allocated_MB,actual_peak_reserved_MB,predicted_peak_reserved_MB,actual_fits,predicted_fits,correct_prediction,dangerous_failure,conservative_failure,outcome
+distilgpt2,1,64,fp32,adamw,1700,1600.69,1552.9860605468748,1738.0,1677.2249453906247,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,fp32,adamw,1700,1600.19,1552.9860605468748,1738.0,1677.2249453906247,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,fp32,sgd,1024,956.49,928.042701171875,1030.0,1002.2861172656252,False,True,False,True,False,dangerous_underprediction
+distilgpt2,1,64,fp32,adamw,1700,1600.94,1552.9860605468748,1738.0,1677.2249453906247,False,True,False,True,False,dangerous_underprediction
+gpt2,1,32,fp32,sgd,1300,1271.56,1196.307083984375,1388.0,1292.0116507031248,False,True,False,True,False,dangerous_underprediction
+gpt2,1,64,fp32,sgd,1400,1279.2,1257.068708984375,1422.0,1357.634205703125,False,True,False,True,False,dangerous_underprediction
+gpt2,1,32,fp32,adamw,2600,2402.82,2288.1175332031253,2616.0,2471.166935859376,False,True,False,True,False,dangerous_underprediction
+gpt2,1,64,fp32,adamw,2600,2409.59,2348.879158203125,2670.0,2536.789490859375,False,True,False,True,False,dangerous_underprediction

@@ -1,28 +1,18 @@
 """
-quantization_recommender.py
+Quantization Recommender
 """
 
 
 class QuantizationRecommender:
 
     @staticmethod
-    def estimate_int8(memory):
-        return memory * 0.5
+    def recommend(
+        predicted_memory_mb,
+        gpu_memory_mb,
+    ):
 
-    @staticmethod
-    def estimate_int4(memory):
-        return memory * 0.25
-
-    @staticmethod
-    def recommend(predicted_memory_mb, gpu_memory_mb):
-
-        int8 = QuantizationRecommender.estimate_int8(
-            predicted_memory_mb
-        )
-
-        int4 = QuantizationRecommender.estimate_int4(
-            predicted_memory_mb
-        )
+        int8 = predicted_memory_mb * 0.5
+        int4 = predicted_memory_mb * 0.25
 
         int8_fit = int8 <= gpu_memory_mb
         int4_fit = int4 <= gpu_memory_mb
@@ -30,7 +20,6 @@ class QuantizationRecommender:
         if predicted_memory_mb <= gpu_memory_mb:
 
             recommendation = "No quantization is required."
-
             precision = "None"
 
         elif int8_fit:
@@ -52,26 +41,19 @@ class QuantizationRecommender:
         else:
 
             recommendation = (
-                "Even INT4 quantization is insufficient."
+                "Even INT4 quantization is insufficient. "
+                "Consider reducing the batch size or using model parallelism."
             )
 
             precision = "None"
 
         return {
 
-            "current_memory_mb": predicted_memory_mb,
+            "recommended_precision": precision,
 
-            "gpu_memory_mb": gpu_memory_mb,
+            "recommendation": recommendation,
 
             "int8_memory_mb": int8,
 
             "int4_memory_mb": int4,
-
-            "int8_fits": int8_fit,
-
-            "int4_fits": int4_fit,
-
-            "recommended_precision": precision,
-
-            "recommendation": recommendation,
         }

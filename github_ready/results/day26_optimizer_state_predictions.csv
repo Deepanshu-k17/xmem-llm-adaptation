@@ -1,0 +1,3 @@
+model_name,optimizer_name,dtype,actual_peak_allocated_MB,actual_peak_reserved_MB,final_allocated_MB,final_reserved_MB,parameter_memory_MB,optimizer_state_factor,estimated_optimizer_state_MB
+distilgpt2,sgd,fp32,956.49,1030.0,345.63,1030.0,312.4716796875,0.0,0.0
+distilgpt2,adamw,fp32,1600.94,1738.0,973.48,1738.0,312.4716796875,2.0,624.943359375

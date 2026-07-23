@@ -1,0 +1,5 @@
+finding,value,metric
+Best all-row allocated MRE,Day 14 Improved + KV,3.752375772873444
+Best distilgpt2 allocated mean error,Day 14 Improved + KV,2.267462326860494
+Day 17 distilgpt2 allocated mean error,CombinedInferenceEstimator,2.3644027253712716
+Day 17 distilgpt2 reserved mean error,CombinedInferenceEstimator,2.36089869319182

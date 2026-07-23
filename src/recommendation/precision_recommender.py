@@ -1,28 +1,18 @@
 """
-precision_recommender.py
+Precision Recommender
 """
 
 
 class PrecisionRecommender:
 
     @staticmethod
-    def estimate_fp16(memory):
-        return memory * 0.5
+    def recommend(
+        predicted_memory_mb,
+        gpu_memory_mb,
+    ):
 
-    @staticmethod
-    def estimate_bf16(memory):
-        return memory * 0.5
-
-    @staticmethod
-    def recommend(predicted_memory_mb, gpu_memory_mb):
-
-        fp16 = PrecisionRecommender.estimate_fp16(
-            predicted_memory_mb
-        )
-
-        bf16 = PrecisionRecommender.estimate_bf16(
-            predicted_memory_mb
-        )
+        fp16 = predicted_memory_mb * 0.5
+        bf16 = predicted_memory_mb * 0.5
 
         fp16_fit = fp16 <= gpu_memory_mb
         bf16_fit = bf16 <= gpu_memory_mb
@@ -48,16 +38,10 @@ class PrecisionRecommender:
 
         return {
 
-            "current_memory_mb": predicted_memory_mb,
-
-            "gpu_memory_mb": gpu_memory_mb,
-
             "fp16_memory_mb": fp16,
-
             "bf16_memory_mb": bf16,
 
             "fp16_fits": fp16_fit,
-
             "bf16_fits": bf16_fit,
 
             "recommendation": recommendation,

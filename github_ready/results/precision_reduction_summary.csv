@@ -1,0 +1,5 @@
+metric,value,interpretation
+average_allocated_reduction_percent,47.348136456413954,Average peak allocated memory reduction from fp32 to fp16 across tested GPT-style inference workloads.
+min_allocated_reduction_percent,47.220523572406165,Smallest observed allocated memory reduction from fp32 to fp16.
+max_allocated_reduction_percent,47.47574934042174,Largest observed allocated memory reduction from fp32 to fp16.
+gpt2_reserved_reduction_percent,51.971326164874554,Observed reserved memory reduction for gpt2 fp32 to fp16 inference.

@@ -1,8 +1,5 @@
 """
-recommendation_orchestrator.py
-
-Combines multiple recommenders into a single
-optimization plan.
+Recommendation Orchestrator
 """
 
 from src.recommendation.decision_engine import DecisionEngine
@@ -15,7 +12,7 @@ class RecommendationOrchestrator:
 
     def __init__(self):
 
-        self.decision_engine = DecisionEngine()
+        self.decision = DecisionEngine()
 
     def recommend(
         self,
@@ -24,26 +21,10 @@ class RecommendationOrchestrator:
         current_batch_size,
     ):
 
-        decision = self.decision_engine.evaluate(
+        decision = self.decision.evaluate(
             predicted_memory_mb,
             gpu_memory_mb,
             current_batch_size,
-        )
-
-        precision = PrecisionRecommender.recommend(
-            predicted_memory_mb,
-            gpu_memory_mb,
-        )
-
-        quantization = QuantizationRecommender.recommend(
-            predicted_memory_mb,
-            gpu_memory_mb,
-        )
-
-        batch = BatchSizeRecommender.recommend(
-            current_batch_size,
-            predicted_memory_mb,
-            gpu_memory_mb,
         )
 
         plan = []
@@ -60,6 +41,11 @@ class RecommendationOrchestrator:
                 "GPU utilization is high."
             )
 
+            precision = PrecisionRecommender.recommend(
+                predicted_memory_mb,
+                gpu_memory_mb,
+            )
+
             plan.append(
                 precision["recommendation"]
             )
@@ -70,12 +56,28 @@ class RecommendationOrchestrator:
                 "Predicted memory exceeds GPU memory."
             )
 
+            precision = PrecisionRecommender.recommend(
+                predicted_memory_mb,
+                gpu_memory_mb,
+            )
+
+            quant = QuantizationRecommender.recommend(
+                predicted_memory_mb,
+                gpu_memory_mb,
+            )
+
+            batch = BatchSizeRecommender.recommend(
+                current_batch_size,
+                predicted_memory_mb,
+                gpu_memory_mb,
+            )
+
             plan.append(
                 precision["recommendation"]
             )
 
             plan.append(
-                quantization["recommendation"]
+                quant["recommendation"]
             )
 
             plan.append(
@@ -87,12 +89,11 @@ class RecommendationOrchestrator:
 
         return {
 
-            "status": decision["status"],
-
             "predicted_memory_mb": predicted_memory_mb,
 
             "gpu_memory_mb": gpu_memory_mb,
 
-            "optimization_plan": plan,
+            "status": decision["status"],
 
+            "optimization_plan": plan,
         }

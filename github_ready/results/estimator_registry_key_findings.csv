@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,All optimization estimators are now centrally registered.,EstimatorRegistry maintains a central mapping.,Improves maintainability.
+2,New estimators can be added without modifying existing modules.,Only one registry entry is needed for a new estimator.,Simplifies future development.
+3,The registry improves project modularity.,Estimator implementations remain unchanged.,Encourages modular software design.
+4,Each estimator remains independently reusable.,Each estimator can still be instantiated individually.,Supports independent testing.
+5,The registry provides a single access point for future extensions.,Future estimators can reuse the same interface.,Makes the framework extensible.

@@ -1,0 +1,5 @@
+finding_id,finding,evidence,why_it_matters
+1,fp16 reduced peak allocated memory by around 47% for both distilgpt2 and gpt2.,distilgpt2 reduced from 343.41 MB to 181.25 MB; gpt2 reduced from 504.11 MB to 264.78 MB.,Precision is a major memory optimization lever for LLM inference workloads.
+2,The fp16 reduction was consistent across model sizes.,"distilgpt2 reduction was 47.22%, while gpt2 reduction was 47.48%.",This suggests that dtype-aware memory estimation can generalize across GPT-style models.
+3,fp16 does not always give exactly 50% total memory reduction.,"Observed reductions were around 47%, not exactly 50%.","Non-parameter memory, activations, allocator behavior, and framework overhead prevent exact halving."
+4,Precision-aware estimation is required before quantization estimation.,fp32 and fp16 memory behavior differs significantly.,This prepares the project for int8/int4 quantization-memory simulation.

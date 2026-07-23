@@ -1,0 +1,9 @@
+safety_margin_percent,optimizer_name,total_cases,correct_cases,dangerous_failures,conservative_failures,accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent
+0.0,adamw,98,89,6,3,90.81632653061224,6.122448979591836,3.061224489795918
+0.0,sgd,14,13,1,0,92.85714285714286,7.142857142857142,0.0
+5.0,adamw,98,89,0,9,90.81632653061224,0.0,9.183673469387756
+5.0,sgd,14,14,0,0,100.0,0.0,0.0
+10.0,adamw,98,83,0,15,84.6938775510204,0.0,15.306122448979592
+10.0,sgd,14,14,0,0,100.0,0.0,0.0
+15.0,adamw,98,82,0,16,83.6734693877551,0.0,16.3265306122449
+15.0,sgd,14,14,0,0,100.0,0.0,0.0

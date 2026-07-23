@@ -1,0 +1,3 @@
+experiment,num_runs,min_peak_allocated_MB,max_peak_allocated_MB,min_peak_reserved_MB,max_peak_reserved_MB,oom_count
+sequence_length_variation,4,27.27,118.95,48.0,132.0,0
+optimizer_comparison,2,69.84,69.84,82.0,84.0,0

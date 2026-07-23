@@ -7,11 +7,7 @@ from src.recommendation.batch_size_recommender import BatchSizeRecommender
 
 class DecisionEngine:
 
-    def __init__(
-        self,
-        warning_threshold=0.90,
-        danger_threshold=1.00,
-    ):
+    def __init__(self, warning_threshold=0.90, danger_threshold=1.00):
         self.warning_threshold = warning_threshold
         self.danger_threshold = danger_threshold
 
@@ -26,8 +22,8 @@ class DecisionEngine:
             raise ValueError("GPU memory must be greater than zero.")
 
         utilization = predicted_memory_mb / gpu_memory_mb
-
-        remaining_memory = gpu_memory_mb - predicted_memory_mb
+        utilization_percent = utilization * 100
+        remaining_memory_mb = gpu_memory_mb - predicted_memory_mb
 
         recommendations = []
 
@@ -38,7 +34,6 @@ class DecisionEngine:
             recommendations.append(
                 "Training should fit comfortably within GPU memory."
             )
-
             recommendations.append(
                 "No optimization is required."
             )
@@ -60,10 +55,8 @@ class DecisionEngine:
                 )
 
                 recommendations.append(
-                    f"Reduce batch size from "
-                    f"{batch['current_batch_size']} "
-                    f"to "
-                    f"{batch['recommended_batch_size']}."
+                    f"Reduce batch size from {batch['current_batch_size']} "
+                    f"to {batch['recommended_batch_size']}."
                 )
 
             recommendations.append(
@@ -87,10 +80,8 @@ class DecisionEngine:
                 )
 
                 recommendations.append(
-                    f"Reduce batch size from "
-                    f"{batch['current_batch_size']} "
-                    f"to "
-                    f"{batch['recommended_batch_size']}."
+                    f"Reduce batch size from {batch['current_batch_size']} "
+                    f"to {batch['recommended_batch_size']}."
                 )
 
             recommendations.append(
@@ -102,14 +93,11 @@ class DecisionEngine:
             )
 
         return {
-
             "status": status,
-
             "utilization": utilization,
-
-            "utilization_percent": utilization * 100,
-
-            "remaining_memory_mb": remaining_memory,
-
+            "utilization_percent": utilization_percent,
+            "predicted_memory_mb": predicted_memory_mb,
+            "gpu_memory_mb": gpu_memory_mb,
+            "remaining_memory_mb": remaining_memory_mb,
             "recommendations": recommendations,
         }

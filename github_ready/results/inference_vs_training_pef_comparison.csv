@@ -1,0 +1,4 @@
+phase,estimator,safety_margin_percent,total_cases,correct_cases,dangerous_failures,conservative_failures,accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent
+inference,CombinedInferenceEstimator,0.0,720.0,678.0,40.0,2.0,94.17,5.56,0.28
+training,TrainingMemoryEstimatorV4,0.0,266.0,256.0,8.0,2.0,96.2406015037594,3.007518796992481,0.7518796992481203
+training,TrainingMemoryEstimatorV4 + safety margin,7.5,266.0,253.0,0.0,13.0,95.1127819548872,0.0,4.887218045112782

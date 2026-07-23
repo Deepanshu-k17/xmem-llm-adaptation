@@ -1,0 +1,3 @@
+architecture,primary_memory_driver,parameter_dominance,activation_dominance,memory_scaling_pattern,recommended_estimator_focus
+CNN,Image Resolution (H × W),Low,High,Approximately linear with batch size and quadratic with image resolution,Activation Estimation
+Transformer,Sequence Length,High,High,Approximately linear with batch size and quadratic with sequence length due to attention,Attention Memory Estimation

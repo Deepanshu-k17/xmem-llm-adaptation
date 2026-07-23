@@ -1,0 +1,6 @@
+use_case,recommendation,reason,caution
+Measured precision behavior,Use fp32/fp16 measured results from Day 41.,These are actual runtime CUDA memory measurements.,Only covers distilgpt2 and gpt2 inference.
+Parameter-memory estimation,Use QuantizationMemoryEstimator raw/effective parameter memory.,It includes dtype size and metadata overhead.,Does not represent full runtime memory.
+Total-memory reasoning,Use Day 46 quantization-aware total-memory approximation.,It separates parameter and non-parameter memory.,Assumes non-parameter memory remains unchanged.
+int8/int4 claims,Label as analytical estimates only.,No real int8/int4 quantized execution was measured.,"Do not claim runtime memory, latency, or quality results."
+Next technical phase,Move to sparsity memory estimation.,Precision and quantization phase is now complete enough.,Do not keep over-tweaking quantization without new measured experiments.

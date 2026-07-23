@@ -1,0 +1,3 @@
+model_name,batch_size,input_tokens,max_new_tokens,dtype,use_cache,memory_limit_MB,actual_peak_reserved_MB,predicted_peak_reserved_MB,actual_fits,predicted_fits,correct_prediction,dangerous_failure,conservative_failure,outcome
+distilgpt2,1,16,32,fp32,True,360,358.0,370.0,True,False,False,False,True,conservative_overprediction
+distilgpt2,1,32,32,fp32,True,360,360.0,372.0,True,False,False,False,True,conservative_overprediction

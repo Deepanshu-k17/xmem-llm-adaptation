@@ -1,0 +1,4 @@
+comparison,phase,safety_margin_percent,accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent,interpretation
+inference_no_margin,inference,0.0,94.17,5.56,0.28,Baseline inference PEF performance.
+training_v4_no_margin,training,0.0,96.2406015037594,3.007518796992481,0.7518796992481203,V4 improves training PEF accuracy but still has dangerous failures.
+training_v4_safe_margin,training,7.5,95.1127819548872,0.0,4.887218045112782,Recommended safe training placement setting because dangerous failures are removed.

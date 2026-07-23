@@ -1,0 +1,10 @@
+stage,allocated_MB,reserved_MB,peak_allocated_MB,peak_reserved_MB
+before_model_load,0.0,0.0,0.0,0.0
+after_model_load,2.79,4.0,2.79,4.0
+after_batch_creation,2.79,4.0,2.79,4.0
+after_optimizer_creation,2.79,4.0,2.79,4.0
+after_forward,24.21,44.0,24.21,44.0
+after_loss,24.21,44.0,24.21,44.0
+after_backward,26.97,46.0,36.48,46.0
+after_optimizer_step,28.54,48.0,36.48,48.0
+after_zero_grad,27.75,48.0,36.48,48.0

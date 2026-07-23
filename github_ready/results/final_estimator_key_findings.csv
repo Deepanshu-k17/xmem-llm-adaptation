@@ -1,0 +1,7 @@
+finding_id,finding,evidence,why_it_matters
+1,Inference memory prediction generalizes from distilgpt2 to gpt2.,gpt2 inference achieved 2.50% allocated mean error and 2.28% reserved mean error.,Shows estimator is not only fitted to distilgpt2.
+2,Training memory needs separate modeling from inference memory.,Training used around 4.7x to 4.8x more memory than comparable inference runs.,"Gradients, optimizer states, and backward temporary memory make training fundamentally different."
+3,AdamW optimizer state is close to 2x parameter memory.,distilgpt2 estimate 624.94 MB vs observed 644.45 MB; gpt2 estimate 949.40 MB vs observed ~950.92 MB.,Optimizer-state modeling is essential for training memory prediction.
+4,V4 is the strongest current training estimator.,"V4 achieved 3.66% allocated mean error, 4.29% reserved mean error, and reduced max errors compared with V2/V3.",V4 becomes the candidate final training estimator.
+5,PEF-style evaluation is stricter than MRE.,V4 had low error but still produced dangerous failures near tight memory limits.,"Deployment decisions require fit/fail evaluation, not only numeric prediction error."
+6,V4 needs a 7.5% safety margin for safe training placement.,7.5% margin reduced dangerous failures to 0 with 95.11% accuracy.,Safe scheduling prioritizes avoiding OOM over maximizing raw accuracy.

@@ -1,7 +1,5 @@
 """
-batch_size_recommender.py
-
-Recommend a batch size based on predicted memory.
+Batch Size Recommender
 """
 
 
@@ -16,12 +14,6 @@ class BatchSizeRecommender:
 
         if current_batch_size <= 0:
             raise ValueError("Batch size must be positive.")
-
-        if predicted_memory_mb <= 0:
-            raise ValueError("Predicted memory must be positive.")
-
-        if gpu_memory_mb <= 0:
-            raise ValueError("GPU memory must be positive.")
 
         scaling_factor = gpu_memory_mb / predicted_memory_mb
 

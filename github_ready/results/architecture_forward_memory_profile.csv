@@ -1,0 +1,2 @@
+architecture,model_name,batch_size,input_shape,sequence_length,peak_allocated_MB,peak_reserved_MB,final_allocated_MB,final_reserved_MB,scope_note
+N/A,N/A,,CUDA not available,,,,,,CUDA not available; forward memory profiling skipped.

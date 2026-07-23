@@ -1,0 +1,15 @@
+model_name,batch_size,input_tokens,dtype,optimizer_name,actual_peak_allocated_MB,actual_peak_reserved_MB
+distilgpt2,1,32,fp32,adamw,1592.43,1700.0
+distilgpt2,1,64,fp32,adamw,1600.69,1738.0
+distilgpt2,1,128,fp32,adamw,1616.71,1726.0
+distilgpt2,1,64,fp32,adamw,1600.19,1738.0
+distilgpt2,2,64,fp32,adamw,1616.21,1726.0
+distilgpt2,4,64,fp32,adamw,1648.43,1768.0
+distilgpt2,1,64,fp32,sgd,956.49,1030.0
+distilgpt2,1,64,fp32,adamw,1600.94,1738.0
+gpt2,1,32,fp32,sgd,1271.56,1388.0
+gpt2,1,64,fp32,sgd,1279.2,1422.0
+gpt2,1,128,fp32,sgd,1292.34,1406.0
+gpt2,1,32,fp32,adamw,2402.82,2616.0
+gpt2,1,64,fp32,adamw,2409.59,2670.0
+gpt2,1,128,fp32,adamw,2422.73,2634.0

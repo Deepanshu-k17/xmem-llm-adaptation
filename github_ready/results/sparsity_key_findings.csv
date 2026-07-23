@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Unstructured sparsity needs index metadata.,The sparse estimate stores both nonzero values and index metadata.,Sparse memory savings are lower than the raw zero-weight percentage suggests.
+2,Low sparsity can use more memory than dense storage.,"With value_bytes=4 and index_bytes=4, sparse storage at 25% sparsity is larger than dense fp32 storage.",Sparsity is not automatically a memory win unless sparsity is high enough or the sparse format is efficient.
+3,Around 50% sparsity is the break-even point in this simple unstructured model.,"At 50% sparsity, nonzero values plus indices roughly equal dense fp32 memory.","Below this level, sparse storage overhead can cancel the benefit of zero weights."
+4,High sparsity can reduce parameter memory significantly.,"At 75% and 90% sparsity, sparse parameter memory becomes lower than dense parameter memory.",Sparsity can be useful for memory reduction when sparsity is high and sparse storage is supported.
+5,"This is analytical storage estimation, not real sparse runtime profiling.",The simulation does not run sparse CUDA kernels or measure latency.,"Sparse runtime benefits depend on hardware, kernels, sparse format, and workload shape."

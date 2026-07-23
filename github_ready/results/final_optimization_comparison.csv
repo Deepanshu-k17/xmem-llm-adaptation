@@ -1,0 +1,10 @@
+rank_by_avg_reduction,method,optimization_type,avg_total_reduction_percent,distilgpt2_reduction_percent,gpt2_reduction_percent,runtime_measured,claim_status,main_tradeoff
+1,int4 quantization,weight quantization,80.2828507976021,78.90612816429454,81.65957343090963,no,analytical estimate only,Largest analytical quantization saving; quality and kernel support matter.
+2,fp16 model parallelism - 4 devices,precision + model parallelism,77.30298282205146,75.97736016396219,78.62860548014075,no,analytical estimate only,Combines dtype reduction and model partitioning; analytical only.
+3,90% unstructured sparsity,sparse storage,74.06273803310319,72.79268039661046,75.33279566959592,no,analytical estimate only,Strong analytical saving; real sparse runtime depends on kernels/hardware.
+4,fp32 model parallelism - 8 devices,model parallelism,73.59984592039629,72.33772614413164,74.86196569666095,no,analytical estimate only,Large per-device reduction but higher distributed-system complexity.
+5,int8 quantization,weight quantization,68.71054797992971,67.53227185232416,69.88882410753527,no,analytical estimate only,Strong analytical memory reduction; needs real quantized execution validation.
+6,fp32 model parallelism - 4 devices,model parallelism,62.027543102723925,60.96386983216127,63.091216373286585,no,analytical estimate only,Stronger per-device memory reduction; more communication and coordination.
+7,fp16 precision,precision reduction,46.28921127068949,45.495425247881535,47.08299729349745,partly measured,measured + analytical approximation,Practical and widely supported; measured fp16 behavior exists.
+8,75% unstructured sparsity,sparse storage,46.28921127068949,45.495425247881535,47.08299729349745,no,analytical estimate only,Useful only after sparsity overcomes index metadata overhead.
+9,fp32 model parallelism - 2 devices,model parallelism,38.88293746737918,38.216157208220494,39.54971772653786,no,analytical estimate only,Reduces per-device memory but needs multiple devices and communication.

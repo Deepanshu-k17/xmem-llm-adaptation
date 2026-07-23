@@ -1,0 +1,4 @@
+experiment_type,total_cases,correct_cases,dangerous_failures,conservative_failures,accuracy_percent,dangerous_failure_rate_percent,conservative_failure_rate_percent
+distilgpt2_batch_size_variation,42,38,2,2,90.47619047619048,4.761904761904762,4.761904761904762
+distilgpt2_optimizer_comparison,28,25,3,0,89.28571428571429,10.714285714285714,0.0
+distilgpt2_sequence_length_variation,42,39,2,1,92.85714285714286,4.761904761904762,2.380952380952381

@@ -1,0 +1,17 @@
+batch_size,image_size,estimated_total_activation_memory_MB,scope_note
+1,64,1.10986328125,Analytical activation-memory estimate for SimpleCNN forward activations.
+1,128,4.43798828125,Analytical activation-memory estimate for SimpleCNN forward activations.
+1,224,13.59033203125,Analytical activation-memory estimate for SimpleCNN forward activations.
+1,384,39.93798828125,Analytical activation-memory estimate for SimpleCNN forward activations.
+2,64,2.2197265625,Analytical activation-memory estimate for SimpleCNN forward activations.
+2,128,8.8759765625,Analytical activation-memory estimate for SimpleCNN forward activations.
+2,224,27.1806640625,Analytical activation-memory estimate for SimpleCNN forward activations.
+2,384,79.8759765625,Analytical activation-memory estimate for SimpleCNN forward activations.
+4,64,4.439453125,Analytical activation-memory estimate for SimpleCNN forward activations.
+4,128,17.751953125,Analytical activation-memory estimate for SimpleCNN forward activations.
+4,224,54.361328125,Analytical activation-memory estimate for SimpleCNN forward activations.
+4,384,159.751953125,Analytical activation-memory estimate for SimpleCNN forward activations.
+8,64,8.87890625,Analytical activation-memory estimate for SimpleCNN forward activations.
+8,128,35.50390625,Analytical activation-memory estimate for SimpleCNN forward activations.
+8,224,108.72265625,Analytical activation-memory estimate for SimpleCNN forward activations.
+8,384,319.50390625,Analytical activation-memory estimate for SimpleCNN forward activations.

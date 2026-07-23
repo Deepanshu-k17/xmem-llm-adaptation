@@ -1,0 +1,7 @@
+timestamp,device_name,gpu_name,model_name,task,batch_size,input_tokens,dtype,optimizer_name,learning_rate,oom,error_message,loss,runtime_sec,peak_allocated_MB,peak_reserved_MB,final_allocated_MB,final_reserved_MB
+2026-06-16T04:28:13.324403,colab,Tesla T4,gpt2,training,1,32,fp32,sgd,5e-05,False,,0.7722220420837402,2.3133,1271.56,1388.0,499.48,1388.0
+2026-06-16T04:28:48.909781,colab,Tesla T4,gpt2,training,1,64,fp32,sgd,5e-05,False,,0.4610491693019867,0.2058,1279.2,1422.0,506.23,1422.0
+2026-06-16T04:28:55.502675,colab,Tesla T4,gpt2,training,1,128,fp32,sgd,5e-05,False,,0.28663110733032227,0.1796,1292.34,1406.0,518.51,1406.0
+2026-06-16T04:29:03.611470,colab,Tesla T4,gpt2,training,1,32,fp32,adamw,5e-05,False,,0.6645404696464539,0.2111,2402.82,2616.0,1451.53,2616.0
+2026-06-16T04:29:10.043643,colab,Tesla T4,gpt2,training,1,64,fp32,adamw,5e-05,False,,0.5554954409599304,0.1183,2409.59,2670.0,1457.16,2670.0
+2026-06-16T04:29:15.122103,colab,Tesla T4,gpt2,training,1,128,fp32,adamw,5e-05,False,,0.2671022117137909,0.1132,2422.73,2634.0,1469.43,2634.0

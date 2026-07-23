@@ -1,0 +1,4 @@
+model_name,batch_size,input_tokens,optimizer_name,experiment_type,memory_limit_MB,actual_peak_reserved_MB,predicted_peak_reserved_MB,actual_peak_allocated_MB,predicted_peak_allocated_MB,actual_fits,predicted_fits,correct_prediction,dangerous_failure,conservative_failure,outcome
+distilgpt2,1,128,adamw,distilgpt2_sequence_length_variation,1750,1726.0,1763.6171153906248,1616.71,1632.978810546875,True,False,False,False,True,conservative_overprediction
+distilgpt2,2,64,adamw,distilgpt2_batch_size_variation,1750,1726.0,1763.6171153906248,1616.21,1632.978810546875,True,False,False,False,True,conservative_overprediction
+distilgpt2,4,64,adamw,distilgpt2_batch_size_variation,1800,1768.0,1936.401455390625,1648.43,1792.964310546875,True,False,False,False,True,conservative_overprediction

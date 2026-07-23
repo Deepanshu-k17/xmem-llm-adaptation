@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Parameter memory scales almost linearly with bytes per parameter.,"fp16 uses 2 bytes/parameter, int8 uses 1 byte/parameter, and int4 uses 0.5 bytes/parameter.",This makes quantization a direct memory optimization lever for model weights.
+2,int8 theoretically reduces parameter memory by about 75% compared with fp32.,int8 uses one-fourth the storage of fp32 for parameters.,This can significantly reduce inference memory for large models.
+3,int4 theoretically reduces parameter memory by about 87.5% compared with fp32.,int4 uses one-eighth the storage of fp32 for parameters.,This is useful for very memory-constrained deployment settings.
+4,Total runtime memory will not reduce exactly by the theoretical parameter-memory ratio.,"Day 41 showed fp16 allocated-memory reduction was about 47%, not exactly 50%.","Activations, KV cache, temporary buffers, metadata, scales, zero-points, and allocator behavior also affect total memory."
+5,Quantization estimation should separate parameter memory from total GPU memory.,"Quantization mainly compresses weights, while activations and allocator overhead may remain fp16/fp32-like.",A realistic estimator must avoid overclaiming total memory savings.

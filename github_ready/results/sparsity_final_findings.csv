@@ -1,0 +1,7 @@
+finding_id,finding,evidence,interpretation
+1,Unstructured sparsity is not automatically memory-efficient.,"At 0% and 25% sparsity, estimated total memory is worse than dense fp32 because each nonzero stores value plus index.",Sparsity needs high zero density or efficient sparse formats to become useful.
+2,50% sparsity is the break-even point in the current unstructured sparse fp32 model.,"At 50% sparsity, estimated total-memory reduction is 0% for both distilgpt2 and gpt2.",The index metadata cancels out the value-memory savings.
+3,75% sparsity gives similar total-memory savings to fp16 in this approximation.,"Average 75% sparsity reduction is 46.29%, while average fp16 reduction is 46.29%.",Sparse storage needs quite high sparsity to compete with simple dtype reduction.
+4,90% sparsity gives strong memory reduction but still needs runtime validation.,Average 90% sparsity total-memory reduction is 74.06%.,"The analytical estimate is promising, but real sparse execution depends on kernels and hardware."
+5,Quantization is easier to reason about for memory than unstructured sparsity.,"Quantization reduces bytes per value, while unstructured sparsity also adds index metadata.",Sparsity has a more complicated memory tradeoff than dtype reduction.
+6,"The sparsity phase is analytical, not measured runtime profiling.","No sparse CUDA kernels, sparse matrix multiplications, or compressed model execution were measured.",The project should clearly label sparsity results as analytical estimates.

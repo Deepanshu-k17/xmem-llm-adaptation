@@ -1,0 +1,5 @@
+timestamp,device_name,gpu_name,model_name,task,batch_size,input_tokens,dtype,optimizer_name,learning_rate,oom,error_message,loss,runtime_sec,final_allocated_MB,final_reserved_MB,peak_allocated_MB,peak_reserved_MB,experiment_type,sequence_length
+2026-06-04T04:57:20.820568,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,16,fp32,adamw,5e-05,False,,10.828448,5.676,25.37,48.0,27.27,48.0,sequence_length_variation,16
+2026-06-04T04:57:27.794366,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,32,fp32,adamw,5e-05,False,,10.829083,1.06,28.44,68.0,45.29,68.0,sequence_length_variation,32
+2026-06-04T04:57:29.319076,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,64,fp32,adamw,5e-05,False,,10.830624,1.043,34.57,84.0,69.84,84.0,sequence_length_variation,64
+2026-06-04T04:57:30.906285,colab,Tesla T4,sshleifer/tiny-gpt2,training,1,128,fp32,adamw,5e-05,False,,10.827228,1.057,46.84,132.0,118.95,132.0,sequence_length_variation,128

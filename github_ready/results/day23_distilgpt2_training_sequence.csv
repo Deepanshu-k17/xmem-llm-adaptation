@@ -1,0 +1,4 @@
+timestamp,device_name,gpu_name,model_name,task,batch_size,input_tokens,dtype,optimizer_name,learning_rate,oom,error_message,loss,runtime_sec,final_allocated_MB,final_reserved_MB,peak_allocated_MB,peak_reserved_MB,experiment_type,sequence_length
+2026-06-08T04:57:04.443752,colab,Tesla T4,distilgpt2,training,1,32,fp32,adamw,5e-05,False,,3.815424,9.323,965.34,1700.0,1592.43,1700.0,distilgpt2_sequence_length_variation,32
+2026-06-08T04:57:15.648185,colab,Tesla T4,distilgpt2,training,1,64,fp32,adamw,5e-05,False,,2.154191,1.6,972.73,1738.0,1600.69,1738.0,distilgpt2_sequence_length_variation,64
+2026-06-08T04:57:18.059131,colab,Tesla T4,distilgpt2,training,1,128,fp32,adamw,5e-05,False,,0.969172,1.549,987.62,1726.0,1616.71,1726.0,distilgpt2_sequence_length_variation,128

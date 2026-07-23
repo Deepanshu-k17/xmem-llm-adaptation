@@ -1,0 +1,14 @@
+safety_margin,safety_margin_percent,model_name,batch_size,input_tokens,dtype,optimizer_name,memory_limit_MB,actual_peak_allocated_MB,predicted_peak_allocated_MB,actual_peak_reserved_MB,predicted_peak_reserved_MB,safe_predicted_reserved_MB,actual_fits,predicted_fits,correct_prediction,dangerous_failure,conservative_failure,outcome
+0.075,7.5,distilgpt2,1,32,fp32,adamw,1700,1592.43,1512.9896855468749,1700.0,1634.028860390625,1756.5810249199217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,1,64,fp32,adamw,1800,1600.69,1552.9860605468748,1738.0,1677.2249453906247,1803.0168162949215,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,1,128,fp32,adamw,1800,1616.71,1632.978810546875,1726.0,1763.6171153906248,1895.8883990449217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,1,64,fp32,adamw,1800,1600.19,1552.9860605468748,1738.0,1677.2249453906247,1803.0168162949215,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,2,64,fp32,adamw,1800,1616.21,1632.978810546875,1726.0,1763.6171153906248,1895.8883990449217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,4,64,fp32,adamw,1800,1648.43,1792.964310546875,1768.0,1936.401455390625,2081.6315645449217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,4,64,fp32,adamw,1900,1648.43,1792.964310546875,1768.0,1936.401455390625,2081.6315645449217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,4,64,fp32,adamw,2000,1648.43,1792.964310546875,1768.0,1936.401455390625,2081.6315645449217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,4,64,fp32,adamw,2048,1648.43,1792.964310546875,1768.0,1936.401455390625,2081.6315645449217,True,False,False,False,True,conservative_overprediction
+0.075,7.5,distilgpt2,1,64,fp32,adamw,1800,1600.94,1552.9860605468748,1738.0,1677.2249453906247,1803.0168162949215,True,False,False,False,True,conservative_overprediction
+0.075,7.5,gpt2,1,128,fp32,sgd,1500,1292.34,1378.591958984375,1406.0,1488.879315703125,1600.5452643808594,True,False,False,False,True,conservative_overprediction
+0.075,7.5,gpt2,1,128,fp32,sgd,1600,1292.34,1378.591958984375,1406.0,1488.879315703125,1600.5452643808594,True,False,False,False,True,conservative_overprediction
+0.075,7.5,gpt2,1,128,fp32,adamw,2800,2422.73,2470.402408203125,2634.0,2668.034600859375,2868.137195923828,True,False,False,False,True,conservative_overprediction

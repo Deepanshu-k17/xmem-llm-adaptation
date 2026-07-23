@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Measured fp16 runtime memory reduction is slightly lower than theoretical parameter-memory reduction.,"Measured allocated reduction averaged 47.35%, while theoretical fp16 parameter reduction is 50%.","Runtime memory includes activations, KV cache, buffers, framework overhead, and allocator behavior."
+2,The gap between theoretical and measured fp16 reduction is small but important.,Average gap was about 2.65 percentage points.,This shows why quantization estimators should not claim total memory savings equal to parameter-memory savings.
+3,int8 and int4 provide strong analytical parameter-memory reductions after metadata overhead.,"At group size 128, int8 effective reduction averaged 74.22%, and int4 averaged 86.72%.",Quantization is a strong candidate optimization for memory-constrained inference.
+4,int8/int4 results remain analytical estimates.,The project estimates parameter and metadata memory but does not run real quantized kernels.,This prevents overclaiming measured runtime quantization performance.
+5,Quantization affects parameter memory more directly than total runtime memory.,Measured fp16 reduction was below the 50% parameter-only expectation.,Future total-memory estimators should model activations and KV cache separately.

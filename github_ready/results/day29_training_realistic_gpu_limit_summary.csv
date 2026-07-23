@@ -1,0 +1,4 @@
+memory_limit_MB,total_cases,correct_cases,dangerous_failures,conservative_failures,accuracy_percent
+2048,8,8,0,0,100.0
+4096,8,8,0,0,100.0
+8192,8,8,0,0,100.0

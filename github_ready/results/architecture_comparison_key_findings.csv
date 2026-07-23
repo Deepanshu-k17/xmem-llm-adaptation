@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,CNN and Transformer architectures have fundamentally different memory-scaling behavior.,CNN scaling experiments varied image resolution while Transformer experiments varied sequence length.,Architecture determines which component contributes most to memory usage.
+2,CNN memory is dominated primarily by activation tensors generated from feature maps.,CNN activation-memory experiments showed rapid growth as image resolution increased.,Vision models benefit from activation-aware estimation.
+3,Transformer memory is strongly influenced by sequence length because of self-attention.,Transformer activation-memory experiments showed increasing memory with longer token sequences.,Language models require attention-aware estimation.
+4,Transformer parameter memory is substantially larger than the SimpleCNN used in this study.,SimpleCNN fp32 parameter memory is about 0.36 MB while the Transformer requires about 42.12 MB.,Large parameter counts make compression techniques especially valuable for Transformers.
+5,Different neural-network architectures require architecture-specific memory estimators.,The architecture comparison demonstrates that a single estimator cannot accurately model every architecture.,Future memory estimators should adapt to the architecture being analyzed.

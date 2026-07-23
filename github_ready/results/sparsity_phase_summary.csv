@@ -1,0 +1,4 @@
+day,phase_step,main_output,main_result,scope
+Day 48,Sparsity memory theory,Analytical unstructured sparse parameter-memory formulas.,50% sparsity breaks even; 75% gives 50% parameter-memory reduction; 90% gives 80% reduction.,Analytical parameter-memory estimation only.
+Day 49,SparsityMemoryEstimator module,Reusable estimator under src/estimators/sparsity_memory_estimator.py.,"Module estimates dense memory, sparse value memory, index metadata, total sparse memory, and reduction vs dense.",Reusable analytical estimator code.
+Day 50,Sparsity-aware total-memory approximation,Combined measured fp32 runtime memory with analytical sparse parameter memory.,50% sparsity breaks even in total memory; 75% and 90% sparsity reduce total memory significantly.,"Analytical total-memory approximation, not real sparse runtime execution."

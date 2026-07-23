@@ -1,0 +1,5 @@
+dtype,bits_per_parameter,bytes_per_parameter,relative_to_fp32,theoretical_parameter_reduction_percent,notes
+fp32,32,4.0,1.0,0.0,Full precision baseline.
+fp16,16,2.0,0.5,50.0,Half precision; commonly used for inference/training acceleration.
+int8,8,1.0,0.25,75.0,8-bit quantization; usually needs scales/zero-points and kernel support.
+int4,4,0.5,0.125,87.5,4-bit quantization; highly compressed but implementation overhead matters.

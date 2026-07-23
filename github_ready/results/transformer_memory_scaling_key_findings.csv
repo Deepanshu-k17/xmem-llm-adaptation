@@ -1,0 +1,6 @@
+finding_id,finding,evidence,why_it_matters
+1,Transformer activation memory increases approximately linearly with batch size.,Estimated activation memory rises nearly proportionally as batch size increases.,Larger batches improve throughput but require proportionally more GPU memory.
+2,Transformer activation memory increases much faster with sequence length.,Attention matrices scale with sequence_length².,Long-context inference becomes memory intensive much faster than CNN inference.
+3,Attention tensors dominate activation memory.,Attention score matrices are O(sequence²).,Sequence length is usually the largest driver of Transformer inference memory.
+4,Transformer memory scaling differs fundamentally from CNN scaling.,CNN depends mainly on image resolution while Transformer depends on sequence length.,Architecture-specific estimators are required.
+5,Day 58 establishes Transformer activation-memory scaling.,Analytical estimates and CUDA profiling were generated across multiple sequence lengths and batch sizes.,Provides the Transformer counterpart to the CNN scaling study from Day 57.

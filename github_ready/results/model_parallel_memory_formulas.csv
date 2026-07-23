@@ -1,0 +1,6 @@
+concept,formula,meaning
+single_device_parameter_memory,total_parameter_memory_MB,"Without model parallelism, each device stores the full parameter memory."
+ideal_partitioned_parameter_memory,total_parameter_memory_MB / num_devices,Ideal per-device parameter memory if parameters are evenly split.
+replicated_overhead_memory,total_parameter_memory_MB * replication_overhead_percent,"Extra replicated memory such as small shared tensors, metadata, or framework overhead."
+communication_buffer_memory,total_parameter_memory_MB * communication_buffer_percent,Temporary memory used for communication buffers during distributed execution.
+estimated_per_device_memory,partitioned_parameter_memory + replicated_overhead_memory + communication_buffer_memory,Simple analytical estimate of per-device model-parallel memory.
